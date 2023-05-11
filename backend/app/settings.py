@@ -26,6 +26,15 @@ SECRET_KEY = 'django-insecure-()@*iq17mab0u=591^6$w$tpiam17er#8*in$9)eclsvm$#vvs
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:3000", "http://localhost:3000"
+]
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000"]
+CORS_ORIGIN_ALLOW_ALL = True
+CSRF_COOKIE_NAME = "XSRF-TOKEN"
+
+CORS_ALLOW_CREDENTIALS = True
 
 
 # Application definition
@@ -40,6 +49,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "core",
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -49,6 +59,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -65,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },
