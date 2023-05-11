@@ -141,3 +141,6 @@ GitHub.sublime-settings
 # Node
 node_modules/
 ./node_modules/
+
+# Images
+backend/products
