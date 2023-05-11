@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 from .serializers import CartSerializer, OrderSerializer
 from .cart import Cart
 
-
 class CartView(viewsets.ViewSet):
     queryset = Product.objects.none()
     serializer_class = CartSerializer
@@ -37,8 +36,8 @@ class CartView(viewsets.ViewSet):
 
         cart = self.get_cart(request)
         cart.add(product, quantity, update_quantity)
-
-        return Response({"success": "Product added to cart"})
+        
+        return Response({"success": f"{product} added to cart"})
 
     @action(detail=True, methods=["delete"])
     def remove(self, request, pk=None):
@@ -54,6 +53,25 @@ class CartView(viewsets.ViewSet):
         cart.remove(product)
 
         return Response({"success": "Product removed from cart"})
+
+    @action(detail=False, methods=["get"])
+    def get_cart_data(self, request):
+        """Get the cart data"""
+        cart = self.get_cart(request)
+        cart_items = []
+        for item in cart:
+            product = Product.objects.get(id=item['product'].id)
+            cart_items.append({
+                    'id': item['product'].id,
+                    'name': item['product'].name,
+                    'price': str(item['product'].price),
+                    'quantity': item['quantity'],
+                    'brand': product.brand.name,
+                    'total_price': str(item['total_price']),
+                    'image_url': item['product'].get_image_url(request),
+            })
+        total_price = cart.get_total_price()
+        return Response({'cart_items': cart_items, 'total_price': total_price})
 
 
 @api_view(["POST"])
