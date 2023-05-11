@@ -35,5 +35,5 @@ class ProductViewSet(viewsets.ViewSet):
 
     @extend_schema(responses=ProductSerializer)
     def list(self, request):
-        serializer = ProductSerializer(self.queryset, many=True)
+        serializer = ProductSerializer(self.queryset, many=True, context={"request": request})
         return Response(serializer.data)
