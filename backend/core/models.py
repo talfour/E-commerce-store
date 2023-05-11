@@ -49,6 +49,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def get_image_url(self, request):
+        """Get first image"""
+        if self.images.exists():
+            return request.build_absolute_uri(self.images.first().image.url)
+
+
 
 def upload_image(instance, filename):
     """Generate a UUID for the image filename."""
@@ -61,7 +67,7 @@ def upload_image(instance, filename):
 class ProductImages(models.Model):
     """Model representing product images"""
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to=upload_image, blank=True)
 
 
