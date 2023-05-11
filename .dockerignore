@@ -10,5 +10,6 @@ env
 config
 build
 node_modules/
+node_modules
 docker-compose.yaml
 README.md
