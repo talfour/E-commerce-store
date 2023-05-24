@@ -5,10 +5,6 @@ const Cart = () => {
   const [shoppingCart, setShoppingCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState();
 
-  const handleOnQuantityChange = () => {
-    console.log("click");
-  };
-
   const getShoppingCart = async () => {
     try {
       const response = await axiosInstance.get("cart/get_cart_data/");
@@ -19,17 +15,70 @@ const Cart = () => {
     }
   };
 
+  const getNewPrice = async () => {
+    try {
+      const response = await axiosInstance.get("cart/get_cart_data/");
+      setTotalPrice(response.data.total_price);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleRemoveItem = async (id) => {
     try {
       const response = await axiosInstance.delete(`cart/${id}/remove/`);
       if (response.status === 200) {
-        const filteredProducts = shoppingCart.filter(product => product.id !== id)
-        setShoppingCart(filteredProducts)
+        const filteredProducts = shoppingCart.filter(
+          (product) => product.id !== id
+        );
+        setShoppingCart(filteredProducts);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleAmountChange = async (id, mode) => {
+    try {
+      let selectedProduct = shoppingCart.find((product) => product.id === id);
+      const currentQuantity = selectedProduct.quantity;
+      if (currentQuantity > 1) {
+        if (mode === "decrease") {
+          const response = await axiosInstance.post(`cart/${id}/add/`, {
+            quantity: -1,
+          });
+          if (response.status === 200) {
+            updateProductQuantity(id, currentQuantity - 1);
+          }
+        }
+      }
+      if (currentQuantity >= 1) {
+        if (mode === "increase") {
+          const response = await axiosInstance.post(`cart/${id}/add/`, {
+            quantity: 1,
+          });
+          if (response.status === 200) {
+            updateProductQuantity(id, currentQuantity + 1);
+          }
+        }
+      }
+      getNewPrice();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateProductQuantity = (id, quantity) => {
+    const updatedProducts = shoppingCart.map((product) => {
+      if (product.id === id) {
+        const productPrice = product.price * quantity
+        return { ...product, total_price: productPrice.toFixed(2), quantity: quantity };
+      }
+      return product;
+    });
+    setShoppingCart(updatedProducts);
+  };
+
   useEffect(() => {
     getShoppingCart();
   }, []);
@@ -58,7 +107,10 @@ const Cart = () => {
                   </div>
                   <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
                     <div className="flex items-center border-gray-100">
-                      <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50">
+                      <span
+                        onClick={() => handleAmountChange(item.id, "decrease")}
+                        className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
+                      >
                         {" "}
                         -{" "}
                       </span>
@@ -66,10 +118,13 @@ const Cart = () => {
                         className="h-8 w-8 border bg-white text-center text-xs outline-none"
                         type="number"
                         value={item.quantity}
-                        onChange={handleOnQuantityChange}
+                        readOnly={true}
                         min="1"
                       />
-                      <span className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50">
+                      <span
+                        onClick={() => handleAmountChange(item.id, "increase")}
+                        className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"
+                      >
                         {" "}
                         +{" "}
                       </span>
