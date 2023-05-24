@@ -1,44 +1,37 @@
-import React, {useState, useEffect} from "react";
+import { Link } from "react-router-dom";
 import defaultImage from "../images/thenounproject.svg";
 import { axiosInstance } from "../axios";
 
 const Product = ({ product }) => {
-
-  const [cartItems, setCartItems] = useState([])
-  
-
   const productImage = product.images[0]?.image
     ? product.images[0]?.image
-      : defaultImage;
+    : defaultImage;
 
   const data = {
-    quantity: 1
+    quantity: 1,
+  };
+  const handleAddToCart = async (productID) => {
+    try {
+      await axiosInstance.post(`cart/${productID}/add/`, data);
+    } catch (error) {
+      console.log(error);
     }
-    const handleAddToCart = async (productID) => {
-        try {
-          const response = await axiosInstance.post(`cart/${productID}/add/`,data);
-          console.log(response);
-          const anotherResponse = await axiosInstance.get('cart/')
-          console.log(anotherResponse.data);
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  };
   return product.available ? (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <a href="#">
+      <Link to={`product/${product.id}`}>
         <img
           className="p-8 rounded-t-lg object-cover h-48 w-96"
           src={productImage}
           alt={product.name}
         />
-      </a>
+      </Link>
       <div className="px-5 pb-5">
-        <a href="#">
+        <Link to={`product/${product.id}`}>
           <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
             {product.name}
           </h5>
-        </a>
+        </Link>
         <div className="flex items-center mt-2.5 mb-5 italic">
           {product.description}
         </div>
