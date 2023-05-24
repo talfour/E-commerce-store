@@ -19,8 +19,8 @@ const ProductsList = () => {
   };
 
   return (
-    <>
-      <h1 className="text-center text-5xl pt-5 pb-10 font-roboto font-bold">
+    <main>
+      <h1 className="text-center text-5xl pt-10 pb-10 font-roboto font-bold">
         Dostępne produkty:
       </h1>
 
@@ -29,7 +29,7 @@ const ProductsList = () => {
           <Product key={product.id} product={product} />
         ))}
       </div>
-    </>
+    </main>
   );
 };
 
