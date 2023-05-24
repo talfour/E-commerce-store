@@ -12,11 +12,25 @@ class CategoryViewSet(viewsets.ViewSet):
     """Simple Viewset for viewing categories."""
 
     queryset = models.Category.objects.all()
+    serializer_class = CategorySerializer()
 
     @extend_schema(responses=CategorySerializer)
     def list(self, request):
         serializer = CategorySerializer(self.queryset, many=True)
         return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        try:
+            category = models.Category.objects.get(pk=pk)
+        except models.Category.DoesNotExist:
+            return Response({"detail": "Category not found"}, status=404)
+        serializer = CategorySerializer(category)
+        category_data = serializer.data
+
+        products = models.Product.objects.filter(category=category)
+        product_serializer = ProductSerializer(products, many=True)
+        category_data['products'] = product_serializer.data
+        return Response(category_data)
 
 
 class BrandViewSet(viewsets.ViewSet):
