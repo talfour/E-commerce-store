@@ -36,7 +36,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     category = TreeForeignKey(
-        "Category", null=True, blank=True, on_delete=models.SET_NULL
+        "Category", null=True, blank=True, on_delete=models.SET_NULL, related_name="products"
     )
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)
