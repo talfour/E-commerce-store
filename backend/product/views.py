@@ -43,5 +43,5 @@ class ProductViewSet(viewsets.ViewSet):
     @extend_schema(responses=ProductSerializer)
     def retrieve(self, request, pk=None):
         product = get_object_or_404(self.queryset, pk=pk)
-        serializer = ProductSerializer(product)
+        serializer = ProductSerializer(product, context={"request": request})
         return Response(serializer.data)
