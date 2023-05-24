@@ -32,7 +32,7 @@ const Product = ({ product }) => {
             {product.name}
           </h5>
         </Link>
-        <div className="flex items-center mt-2.5 mb-5 italic">
+        <div className="flex items-center mt-2.5 mb-5 italic overflow-hidden truncate w-50">
           {product.description}
         </div>
         <div className="flex items-center mt-2.5 mb-5">
