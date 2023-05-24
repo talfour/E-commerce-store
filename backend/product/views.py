@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework import viewsets
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
@@ -36,4 +38,10 @@ class ProductViewSet(viewsets.ViewSet):
     @extend_schema(responses=ProductSerializer)
     def list(self, request):
         serializer = ProductSerializer(self.queryset, many=True, context={"request": request})
+        return Response(serializer.data)
+
+    @extend_schema(responses=ProductSerializer)
+    def retrieve(self, request, pk=None):
+        product = get_object_or_404(self.queryset, pk=pk)
+        serializer = ProductSerializer(product)
         return Response(serializer.data)
