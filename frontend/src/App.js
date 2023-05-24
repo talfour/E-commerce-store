@@ -7,6 +7,7 @@ import Collection from "./Components/Collection";
 import Cart from "./Components/Cart";
 import Profile from "./Components/Profile";
 import PageNotFound from "./Components/PageNotFound";
+import ProductDetail from "./Components/ProductDetail";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/collection" element={<Collection />} />
         <Route path="/shopping-cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
