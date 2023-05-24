@@ -3,7 +3,7 @@ import { axiosInstance } from "../axios";
 import defaultImage from "../images/thenounproject.svg";
 const Cart = () => {
   const [shoppingCart, setShoppingCart] = useState([]);
-  const [totalPrice, setTotalPrice] = useState()
+  const [totalPrice, setTotalPrice] = useState();
 
   const handleOnQuantityChange = () => {
     console.log("click");
@@ -13,12 +13,23 @@ const Cart = () => {
     try {
       const response = await axiosInstance.get("cart/get_cart_data/");
       setShoppingCart(response.data.cart_items);
-      setTotalPrice(response.data.total_price)
+      setTotalPrice(response.data.total_price);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleRemoveItem = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`cart/${id}/remove/`);
+      if (response.status === 200) {
+        const filteredProducts = shoppingCart.filter(product => product.id !== id)
+        setShoppingCart(filteredProducts)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getShoppingCart();
   }, []);
@@ -72,6 +83,7 @@ const Cart = () => {
                         strokeWidth="1.5"
                         stroke="currentColor"
                         className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
+                        onClick={() => handleRemoveItem(item.id)}
                       >
                         <path
                           strokeLinecap="round"
