@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from core.models import OrderItem, Order
-
+from drf_spectacular.utils import extend_schema_field
 class CartSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
@@ -8,6 +8,7 @@ class CartSerializer(serializers.Serializer):
     quantity = serializers.IntegerField()
     total_price = serializers.SerializerMethodField()
 
+    @extend_schema_field({'type':"integer",'format':'binary'})
     def get_total_price(self, obj):
         return obj.get_total_price()
 
