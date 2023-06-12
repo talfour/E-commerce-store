@@ -28,7 +28,7 @@ class CategoryViewSet(viewsets.ViewSet):
         category_data = serializer.data
 
         products = models.Product.objects.filter(category=category)
-        product_serializer = ProductSerializer(products, many=True)
+        product_serializer = ProductSerializer(products, many=True, context={"request":request})
         category_data['products'] = product_serializer.data
         return Response(category_data)
 
