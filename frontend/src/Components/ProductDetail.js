@@ -157,7 +157,7 @@ const ProductDetail = () => {
                 </span>
               </div>
               <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                <div className="flex items-center mt-5 border-gray-100">
+                <div className="flex items-center mt-5 border-gray-100 w-full">
                   <span
                     onClick={() => {
                       if (quantity > 1) setQuantity((prev) => prev - 1);
