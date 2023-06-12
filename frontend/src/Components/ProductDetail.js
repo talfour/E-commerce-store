@@ -9,15 +9,31 @@ const ProductDetail = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isNotFound, setIsNotFound] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [images, setImages] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const location = useLocation();
   const url = location.pathname;
 
   const handleAddToCart = async (productID) => {
     try {
-      await axiosInstance.post(`cart/${productID}/add/`, {quantity: quantity});
+      await axiosInstance.post(`cart/${productID}/add/`, {
+        quantity: quantity,
+      });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const prevSlide = () => {
+    const isFirstSlide = currentImageIndex === 0;
+    const newIndex = isFirstSlide ? images.length - 1 : currentImageIndex - 1;
+    setCurrentImageIndex(newIndex)
+  };
+
+  const nextSlide = () => {
+    const isLastSlide = currentImageIndex === images.length - 1
+    const newIndex = isLastSlide ? 0 : currentImageIndex + 1
+    setCurrentImageIndex(newIndex)
   };
 
   useEffect(() => {
@@ -26,6 +42,11 @@ const ProductDetail = () => {
         const response = await axiosInstance.get(`${url}/`);
         if (response.status === 200) {
           setProduct(response.data);
+          if (response.data.images.length !== 0) {
+            setImages(response.data.images);
+          } else {
+            setImages([{ id: 0, image: defaultImage }]);
+          }
           setIsLoaded(true);
         }
       } catch (error) {
@@ -47,15 +68,46 @@ const ProductDetail = () => {
       <section className="text-gray-700 body-font overflow-hidden bg-white h-fit mt-20">
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
-            <img
-              alt={product.name}
-              className="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200"
-              src={
-                product.images[0]?.image
-                  ? product.images[0]?.image
-                  : defaultImage
-              }
-            />
+            <div className="max-w-[500px] h-[500px] w-full m-auto relative group">
+              <div
+                alt={product.name}
+                style={{
+                  backgroundImage: `url(${images[currentImageIndex]?.image})`,
+                }}
+                className="w-full h-full rounded-2xl bg-center bg-cover duration-500"
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="lg:hidden group-hover:block w-8 h-8 absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
+                onClick={prevSlide}
+                >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                />
+              </svg>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="lg:hidden group-hover:block w-8 h-8 absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
+                onClick={nextSlide}
+                >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                />
+              </svg>
+            </div>
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
                 {product.brand.name}
