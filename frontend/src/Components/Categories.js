@@ -18,15 +18,19 @@ const Categories = () => {
   };
 
   return (
-    <ul className="flex flex-col h-10 pt-5 items-center text-lg">
-      {categories.map((category) => (
-        <li className="pt-2" key={category.id}>
-          <Link to={`${category.id}`} className="hover:text-blue-400">
-            {category.name}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <section className="text-gray-700 body-font overflow-hidden bg-white h-fit mt-20">
+      <div className="px-5 py-24 my-auto">
+        <ul className="text-center">
+          {categories.map((category) => (
+            <li className="pt-2" key={category.id}>
+              <Link to={`${category.id}`} className="hover:text-blue-400">
+                {category.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 };
 
