@@ -19,7 +19,7 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/categories" className="hover:text-gray-200">
+                  <Link to="/category" className="hover:text-gray-200">
                     Kategorie
                   </Link>
                 </li>
