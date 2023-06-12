@@ -1,9 +1,17 @@
+"""Database models."""
+
 import uuid
 import os
 
 from datetime import date
 
 from django.db import models
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin
+)
+from django.contrib.auth import get_user_model
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -58,6 +66,7 @@ class Product(models.Model):
 
 def upload_image(instance, filename):
     """Generate a UUID for the image filename."""
+
     ext = filename.split(".")[-1]
     filename = f"{uuid.uuid4()}.{ext}"
     today = date.today().strftime("%Y/%m/%d")
@@ -72,6 +81,8 @@ class ProductImages(models.Model):
 
 
 class Order(models.Model):
+    """Model representing order details"""
+
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -81,6 +92,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
+    # user = models.ForeignKey(get_user_model(), on_delete=models.DO_NOTHING, null=True)
 
     class Meta:
         ordering = ("-created",)
@@ -93,6 +105,7 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
+    """Model representing items in order."""
     order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product, related_name="order_items", on_delete=models.CASCADE
@@ -105,3 +118,26 @@ class OrderItem(models.Model):
 
     def get_cost(self):
         return self.price * self.quantity
+
+
+class UserManager(BaseUserManager):
+    """Manager for users."""
+    def create_user(self, email, password=None, **extra_field):
+        """Create, save and return a new user."""
+        user = self.model(email=email, **extra_field)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    """Model representing user in the system."""
+    email = models.EmailField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+

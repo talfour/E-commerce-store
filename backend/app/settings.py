@@ -160,3 +160,5 @@ CART_SESSION_ID = "cart"
 REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"}
 
 SPECTACULAR_SETTINGS = {"TITLE": "Django DRF E-Commerce"}
+
+AUTH_USER_MODEL = 'core.User'
