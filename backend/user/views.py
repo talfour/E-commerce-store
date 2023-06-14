@@ -11,25 +11,24 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
-from .serializers import UserLoginSerializer, UserRegisterSerializer, UserSerializer
-
+from .serializers import UserLoginSerializer, UserSerializer
 
 
 class UserRegister(APIView):
     """View for registering new user in the system."""
+
     permission_classes = (permissions.AllowAny,)
 
     @extend_schema(
-        request=None,
-        operation_id='Register User',
-        responses={
-            200: UserRegisterSerializer
-        },
-        tags=['User'])
+        request=UserSerializer,
+        operation_id="Register User",
+        responses={200: UserSerializer},
+        tags=["User"],
+    )
     def post(self, request):
-        serializer = UserRegisterSerializer(data=request.data)
+        serializer = UserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            user = serializer.create(request.data)
+            user = serializer.create(serializer.validated_data)
             if user:
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -37,17 +36,16 @@ class UserRegister(APIView):
 
 class UserLogin(APIView):
     """View for logging user"""
+
     permission_classes = (permissions.AllowAny,)
     authentication_classes = (SessionAuthentication,)
 
-
     @extend_schema(
-        request=None,
-        operation_id='Login User',
-        responses={
-            200: UserLoginSerializer
-        },
-        tags=['User'])
+        request=UserLoginSerializer,
+        operation_id="Login User",
+        responses={200: UserLoginSerializer},
+        tags=["User"],
+    )
     def post(self, request):
         data = request.data
         serializer = UserLoginSerializer(data=data)
@@ -59,19 +57,34 @@ class UserLogin(APIView):
 
 class UserView(APIView):
     """View for showing user data."""
+
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
 
     @extend_schema(
-        request=None,
-        operation_id='Shows User info.',
-        responses={
-            200: UserSerializer
-        },
-        tags=['User'])
+        request=UserSerializer,
+        operation_id="Shows User info.",
+        responses={200: UserSerializer},
+        tags=["User"],
+    )
     def get(self, request):
         serializer = UserSerializer(request.user)
-        return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+        return Response({"user": serializer.data}, status=status.HTTP_200_OK)
+
+
+    @extend_schema(
+        request=UserSerializer,
+        operation_id="Update User info.",
+        responses={200: UserSerializer},
+        tags=["User"],
+    )
+    def patch(self, request):
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UserLogout(APIView):
@@ -79,11 +92,10 @@ class UserLogout(APIView):
 
     @extend_schema(
         request=None,
-        operation_id='Logout User',
-        responses={
-            200: UserSerializer
-        },
-        tags=['User'])
+        operation_id="Logout User",
+        responses={200: UserSerializer},
+        tags=["User"],
+    )
     def post(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
