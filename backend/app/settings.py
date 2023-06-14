@@ -49,7 +49,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "core",
-    'corsheaders'
+    'corsheaders',
+    'user',
+    'product',
+    'cart'
 ]
 
 MIDDLEWARE = [
@@ -157,7 +160,11 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
 CART_SESSION_ID = "cart"
 
 # DRF Schema
-REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"}
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ('rest_framework.permissions.IsAuthenticated',),
+    "DEFAULT_AUTHENTICATION_CLASSES": ('rest_framework.authentication.SessionAuthentication',),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    }
 
 SPECTACULAR_SETTINGS = {"TITLE": "Django DRF E-Commerce"}
 
