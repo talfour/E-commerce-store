@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../axios";
 import defaultImage from "../images/thenounproject.svg";
 import Popup from "./Popup";
+
 const Cart = () => {
   const [shoppingCart, setShoppingCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
   const [name, setName] = useState("");
   const [sureName, setSureName] = useState("");
   const [email, setEmail] = useState("");
@@ -96,16 +98,24 @@ const Cart = () => {
     setIsPopupOpen(!isPopupOpen);
   };
 
+  const toggleConfirmationPopup = () => {
+    setIsConfirmationPopupOpen(!isConfirmationPopupOpen);
+    setShoppingCart([])
+  };
+
   const handleOrderCreate = async () => {
-    console.log(shoppingCart);
     const response = await axiosInstance.post(`order/`, {
       first_name: name,
       last_name: sureName,
       email: email,
       address: address,
       postal_code: postalCode,
-      city: city
+      city: city,
     });
+    if (response.status === 201) {
+      togglePopup();
+      toggleConfirmationPopup();
+    }
   };
 
   useEffect(() => {
@@ -113,6 +123,18 @@ const Cart = () => {
   }, []);
   return (
     <div>
+      {isConfirmationPopupOpen && (
+        <Popup
+          handleClose={toggleConfirmationPopup}
+          content={
+            <div>
+              <h1 className="text-center text-lg">
+                Twoje zamówienie zostało złożone.
+              </h1>
+            </div>
+          }
+        />
+      )}
       {isPopupOpen && (
         <Popup
           handleClose={() => togglePopup()}
