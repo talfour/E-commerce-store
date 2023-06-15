@@ -1,11 +1,11 @@
 from rest_framework import viewsets
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from core.models import Product, Order, OrderItem
-from rest_framework.views import APIView
 from .serializers import CartSerializer, OrderSerializer
 from .cart import Cart
+
 
 class CartView(viewsets.ViewSet):
     queryset = Product.objects.none()
@@ -36,7 +36,7 @@ class CartView(viewsets.ViewSet):
 
         cart = self.get_cart(request)
         cart.add(product, quantity, update_quantity)
-        
+
         return Response({"success": f"{product} added to cart"})
 
     @action(detail=True, methods=["delete"])
@@ -60,37 +60,43 @@ class CartView(viewsets.ViewSet):
         cart = self.get_cart(request)
         cart_items = []
         for item in cart:
-            product = Product.objects.get(id=item['product'].id)
-            cart_items.append({
-                    'id': item['product'].id,
-                    'name': item['product'].name,
-                    'price': str(item['product'].price),
-                    'quantity': item['quantity'],
-                    'brand': product.brand.name,
-                    'total_price': str(item['total_price']),
-                    'image_url': item['product'].get_image_url(request),
-            })
+            product = Product.objects.get(id=item["product"].id)
+            cart_items.append(
+                {
+                    "id": item["product"].id,
+                    "name": item["product"].name,
+                    "price": str(item["product"].price),
+                    "quantity": item["quantity"],
+                    "brand": product.brand.name,
+                    "total_price": str(item["total_price"]),
+                    "image_url": item["product"].get_image_url(request),
+                }
+            )
         total_price = cart.get_total_price()
-        return Response({'cart_items': cart_items, 'total_price': total_price})
+        return Response({"cart_items": cart_items, "total_price": total_price})
 
-
-@api_view(["POST"])
-def order_create(request):
-    cart = Cart(request)
-    serializer = OrderSerializer(data=request.data)
-    if serializer.is_valid():
-        order = serializer.save()
-        for item in cart:
-            OrderItem.objects.create(order=order, product=item["product"], price=item["price"], quantity=item["quantity"])
-        # Clear the shopping cart
-        cart.clear()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderCreateView(viewsets.ModelViewSet):
     # queryset = Order.objects.none()
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     model = Order
-    def post(self, request):
-        return order_create(request)
+
+    def create(self, request):
+        cart = Cart(request)
+        for item in cart:
+            print(item)
+        serializer = OrderSerializer(data=request.data)
+        if serializer.is_valid():
+            order = serializer.save()
+            for item in cart:
+                OrderItem.objects.create(
+                    order=order,
+                    product=item["product"],
+                    price=item["price"],
+                    quantity=item["quantity"],
+                )
+            # Clear the shopping cart
+            cart.clear()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from core.models import OrderItem, Order
 from drf_spectacular.utils import extend_schema_field
+
+
 class CartSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
@@ -8,7 +10,7 @@ class CartSerializer(serializers.Serializer):
     quantity = serializers.IntegerField()
     total_price = serializers.SerializerMethodField()
 
-    @extend_schema_field({'type':"integer",'format':'binary'})
+    @extend_schema_field({"type": "integer", "format": "binary"})
     def get_total_price(self, obj):
         return obj.get_total_price()
 
@@ -16,19 +18,29 @@ class CartSerializer(serializers.Serializer):
         """Convert the Cart object to a list of items"""
         items = []
         for key, value in instance.items():
-            item_data = {
-                key: str(value)
-            }
+            item_data = {key: str(value)}
             items.append(item_data)
         return items
+
+
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = ("id", "product", "price", "quantity")
 
-class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True)
 
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ("id", "first_name", "last_name", "email", "address", "postal_code", "city", "created", "updated", "paid", "items")
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "address",
+            "postal_code",
+            "city",
+            "created",
+            "updated",
+            "paid",
+        )
