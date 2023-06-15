@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../axios";
 import defaultImage from "../images/thenounproject.svg";
+import Popup from "./Popup";
 const Cart = () => {
   const [shoppingCart, setShoppingCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [sureName, setSureName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
 
   const getShoppingCart = async () => {
     try {
@@ -84,11 +92,151 @@ const Cart = () => {
     setShoppingCart(updatedProducts);
   };
 
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
+
+  const handleOrderCreate = async () => {
+    console.log(shoppingCart);
+    const response = await axiosInstance.post(`order/`, {
+      first_name: name,
+      last_name: sureName,
+      email: email,
+      address: address,
+      postal_code: postalCode,
+      city: city
+    });
+  };
+
   useEffect(() => {
     getShoppingCart();
   }, []);
   return (
     <div>
+      {isPopupOpen && (
+        <Popup
+          handleClose={() => togglePopup()}
+          content={
+            <div>
+              <form className="w-full">
+                <div className="flex flex-wrap -mx-3 mb-6 justify-center align-middle">
+                  <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-first-name"
+                    >
+                      Imię
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      id="grid-first-name"
+                      type="text"
+                      placeholder="Imię"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full md:w-1/2 px-3">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-last-name"
+                    >
+                      Nazwisko
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="grid-last-name"
+                      type="text"
+                      placeholder="Nazwisko"
+                      value={sureName}
+                      onChange={(e) => setSureName(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-wrap -mx-3 mb-6">
+                  <div className="w-full px-3">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-email"
+                    >
+                      Email
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="grid-email"
+                      type="email"
+                      placeholder="email@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-wrap -mx-3 mb-2">
+                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-address"
+                    >
+                      Adres
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="grid-address"
+                      type="text"
+                      placeholder="Adres 1/1"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-city"
+                    >
+                      Miasto
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="grid-city"
+                      type="text"
+                      placeholder="Miasto"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-zip"
+                    >
+                      Kod pocztowy
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="grid-zip"
+                      type="text"
+                      placeholder="00-000"
+                      value={postalCode}
+                      onChange={(e) => setPostalCode(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="md:flex items-center justify-center">
+                  <div className="">
+                    <button
+                      className="shadow bg-pink-400 hover:bg-pink-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                      type="button"
+                      onClick={handleOrderCreate}
+                    >
+                      Zamów
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          }
+        />
+      )}
       <div className="h-fit bg-gray-100 pt-20">
         <h1 className="mb-10 text-center text-2xl font-bold">Twój koszyk</h1>
         {shoppingCart.length === 0 ? (
@@ -185,7 +333,10 @@ const Cart = () => {
                   <p className="text-sm text-gray-700">including VAT</p>
                 </div>
               </div>
-              <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+              <button
+                onClick={togglePopup}
+                className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
+              >
                 Przejdź do płatności
               </button>
             </div>
