@@ -5,6 +5,7 @@ from rest_framework import status
 from core.models import Product, Order, OrderItem
 from .serializers import CartSerializer, OrderSerializer
 from .cart import Cart
+from core.tasks import order_created
 
 
 class CartView(viewsets.ViewSet):
@@ -84,8 +85,6 @@ class OrderCreateView(viewsets.ModelViewSet):
 
     def create(self, request):
         cart = Cart(request)
-        for item in cart:
-            print(item)
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
             order = serializer.save()
@@ -98,5 +97,6 @@ class OrderCreateView(viewsets.ModelViewSet):
                 )
             # Clear the shopping cart
             cart.clear()
+            order_created.apply_async(countdown=30, args=(order.id,),)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
