@@ -12,8 +12,8 @@ router = DefaultRouter()
 router.register(r"category", views.CategoryViewSet)
 router.register(r"brand", views.BrandViewSet)
 router.register(r"product", views.ProductViewSet)
-router.register(r"cart", c_views.CartView, basename="Cart")
-router.register(r"order", c_views.OrderCreateView, basename="Order")
+router.register(r"cart", c_views.CartView, basename="cart")
+router.register(r"order", c_views.OrderCreateView, basename="order")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
