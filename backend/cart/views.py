@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from rest_framework import status
 from core.models import Product, Order, OrderItem
 from .serializers import CartSerializer, OrderSerializer
@@ -9,6 +10,9 @@ from core.tasks import order_created
 
 
 class CartView(viewsets.ViewSet):
+    permission_classes = [
+        AllowAny,
+    ]
     queryset = Product.objects.none()
     serializer_class = CartSerializer
 
@@ -55,7 +59,7 @@ class CartView(viewsets.ViewSet):
 
         return Response({"success": "Product removed from cart"})
 
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get"], url_name="get_cart_data")
     def get_cart_data(self, request):
         """Get the cart data"""
         cart = self.get_cart(request)
@@ -97,6 +101,9 @@ class OrderCreateView(viewsets.ModelViewSet):
                 )
             # Clear the shopping cart
             cart.clear()
-            order_created.apply_async(countdown=30, args=(order.id,),)
+            order_created.apply_async(
+                countdown=30,
+                args=(order.id,),
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
