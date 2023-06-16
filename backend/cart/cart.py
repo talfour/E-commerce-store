@@ -37,9 +37,9 @@ class Cart(object):
         if product_id not in self.cart:
             self.cart[product_id] = {"quantity": 0, "price": str(product.price)}
         if update_quantity:
-            self.cart[product_id]["quantity"] = quantity
+            self.cart[product_id]["quantity"] = int(quantity)
         else:
-            self.cart[product_id]["quantity"] += quantity
+            self.cart[product_id]["quantity"] += int(quantity)
         self.save()
 
     def save(self):
@@ -60,5 +60,6 @@ class Cart(object):
         return total_price
 
     def clear(self):
+        self.cart = {}
         del self.session[settings.CART_SESSION_ID]
         self.save()
