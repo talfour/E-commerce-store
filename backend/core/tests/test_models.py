@@ -70,5 +70,4 @@ class OrderItemModelTest(TestCase):
 
     def test_get_cost(self):
         cost = self.order_item.get_cost()
-        print(cost)
         self.assertEqual(cost, self.order_item.price * self.order_item.quantity)
