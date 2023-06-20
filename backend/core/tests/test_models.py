@@ -1,10 +1,10 @@
 """Tests for models."""
 from decimal import Decimal
 
-from django.test import TestCase
+from core.models import Brand, Category, Order, OrderItem, Product, ProductImages
 from django.contrib.auth import get_user_model
-
-from core.models import Category, Brand, Product, Order, OrderItem
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 
 
 class UserModelTests(TestCase):
@@ -93,3 +93,26 @@ class ProductModelTests(TestCase):
         )
 
         self.assertEqual(str(product), product.name)
+
+
+class ProductImagesTestCase(TestCase):
+    def setUp(self):
+        self.brand = Brand.objects.create(name="Sample Brand")
+        self.category = Category.objects.create(name="Sample Category")
+        self.product = Product.objects.create(
+            name="Example Product",
+            brand=self.brand,
+            category=self.category,
+            price=Decimal("2.5"),
+        )
+        self.image = SimpleUploadedFile(
+            "example.jpg", b"file_content", content_type="image/jpeg"
+        )
+
+    def test_product_image_creation(self):
+        image = ProductImages.objects.create(product=self.product, image=self.image)
+        self.assertEqual(image.product, self.product)
+
+    def test_related_name(self):
+        image = ProductImages.objects.create(product=self.product, image=self.image)
+        self.assertIn(image, self.product.images.all())
