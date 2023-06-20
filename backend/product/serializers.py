@@ -3,15 +3,6 @@ from rest_framework import serializers
 from core import models
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Category
-        fields = [
-            "id",
-            "name",
-        ]
-
-
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Brand
@@ -19,10 +10,15 @@ class BrandSerializer(serializers.ModelSerializer):
             "name",
         ]
 
+
 class ProductImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductImages
-        fields = ['id', 'image',]
+        fields = [
+            "id",
+            "image",
+        ]
+
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImagesSerializer(many=True)
@@ -30,4 +26,23 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Product
-        fields = ['id', 'name', 'description', 'brand', 'category', 'price', 'available', 'created', 'updated', 'images']
+        fields = [
+            "id",
+            "name",
+            "description",
+            "brand",
+            "category",
+            "price",
+            "available",
+            "created",
+            "updated",
+            "images",
+        ]
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True)
+
+    class Meta:
+        model = models.Category
+        fields = ["id", "name", "products"]
