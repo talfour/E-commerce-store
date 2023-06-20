@@ -1,12 +1,11 @@
+from cart import views as c_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from rest_framework.routers import DefaultRouter
-
 from product import views
-from cart import views as c_views
+from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r"category", views.CategoryViewSet, basename="category")

@@ -1,10 +1,8 @@
+from core.models import Brand, Category, Product
 from django.test import TestCase
-from rest_framework.test import APIClient
-from rest_framework.reverse import reverse
 from rest_framework import status
-from core.models import Product, Category, Brand
-from cart.cart import Cart
-
+from rest_framework.reverse import reverse
+from rest_framework.test import APIClient
 
 CART_URL_LIST = reverse("cart-list")
 CART_URL_LIST_DATA = reverse("cart-get_cart_data")

@@ -1,17 +1,16 @@
 """Database models."""
 
-import uuid
 import os
-
+import uuid
 from datetime import date
 
-from django.db import models
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
-    PermissionsMixin
+    PermissionsMixin,
 )
-from django.contrib.auth import get_user_model
+from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 
 

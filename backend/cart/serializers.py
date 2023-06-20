@@ -1,6 +1,6 @@
-from rest_framework import serializers
-from core.models import OrderItem, Order
+from core.models import Order, OrderItem
 from drf_spectacular.utils import extend_schema_field
+from rest_framework import serializers
 
 
 class CartSerializer(serializers.Serializer):

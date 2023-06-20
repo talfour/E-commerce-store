@@ -1,16 +1,12 @@
 """Tests for product APIs."""
 from decimal import Decimal
 
+from core.models import Brand, Category, Product
 from django.test import TestCase
 from django.urls import reverse
-
+from product.serializers import BrandSerializer, CategorySerializer, ProductSerializer
 from rest_framework import status
 from rest_framework.test import APIClient
-
-from core.models import Product, Category, Brand
-
-from product.serializers import ProductSerializer, CategorySerializer, BrandSerializer
-
 
 PRODUCTS_URL = reverse("product-list")
 CATEGORIES_URL = reverse("category-list")

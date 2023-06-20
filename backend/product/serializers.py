@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from core import models
+from rest_framework import serializers
 
 
 class BrandSerializer(serializers.ModelSerializer):

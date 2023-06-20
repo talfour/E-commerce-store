@@ -1,9 +1,10 @@
 from decimal import Decimal
+
+from cart.cart import Cart
+from core.models import Brand, Category, Product
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import TestCase
 from django.test.client import RequestFactory
-from django.contrib.sessions.middleware import SessionMiddleware
-from core.models import Product, Category, Brand
-from cart.cart import Cart
 
 
 class CartTestCase(TestCase):
