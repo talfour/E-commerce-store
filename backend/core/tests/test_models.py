@@ -1,6 +1,9 @@
 """Tests for models."""
+from decimal import Decimal
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+
 from core.models import Category, Brand, Product, Order, OrderItem
 
 
@@ -48,7 +51,6 @@ class UserModelTests(TestCase):
 
 
 class OrderItemModelTest(TestCase):
-    @classmethod
     def setUp(self):
         # Set up non-modified objects used by all test methods
         order = Order.objects.create(
@@ -71,3 +73,23 @@ class OrderItemModelTest(TestCase):
     def test_get_cost(self):
         cost = self.order_item.get_cost()
         self.assertEqual(cost, self.order_item.price * self.order_item.quantity)
+
+
+class ProductModelTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            "test@example.com", "testpass123"
+        )
+        self.category = Category.objects.create(name="Test")
+        self.brand = Brand.objects.create(name="Test brand")
+
+    def test_create_product(self):
+        """Test creating a product is successful."""
+        product = Product.objects.create(
+            name="Test",
+            category=self.category,
+            brand=self.brand,
+            price=Decimal("15.50"),
+        )
+
+        self.assertEqual(str(product), product.name)
