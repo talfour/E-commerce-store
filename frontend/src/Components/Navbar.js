@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import myLogo from "../images/logo.svg";
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div>
       <div className="flex flex-wrap">
@@ -12,7 +18,7 @@ const Navbar = () => {
               <Link to="/" className="text-3xl font-bold font-heading">
                 <img className="h-20" src={myLogo} alt="logo" />
               </Link>
-              <ul className="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12">
+              <ul className="hidden xl:flex px-4 mx-auto font-semibold font-heading space-x-12">
                 <li>
                   <Link to="/" className="hover:text-gray-200">
                     Strona główna
@@ -102,9 +108,10 @@ const Navbar = () => {
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
               </span>
             </Link>
-            <Link
+            <div
               to="/profile"
-              className="navbar-burger self-center mr-12 xl:hidden"
+              className="navbar-burger self-center mr-12 xl:hidden cursor-pointer"
+              onClick={toggleSidebar}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -120,9 +127,48 @@ const Navbar = () => {
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               </svg>
-            </Link>
+            </div>
           </nav>
         </section>
+      </div>
+      <div className={`sidebar ${isOpen ? "active" : ""}`}>
+        <div className="wrapper flex flex-col align-middle items-center justify-center text-3xl text-center h-full">
+          <Link
+            to="/"
+            onClick={toggleSidebar}
+            className="border-b-2 border-b-[#111827] w-full p-2 mb-2 font-heading"
+          >
+            Strona główna
+          </Link>
+          <Link
+            to="/category"
+            onClick={toggleSidebar}
+            className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
+          >
+            Kategorie
+          </Link>
+          <Link
+            onClick={toggleSidebar}
+            to="/collection"
+            className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
+          >
+            Kolekcje
+          </Link>
+          <Link
+            onClick={toggleSidebar}
+            to="/profile"
+            className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
+          >
+            Profil
+          </Link>
+          <Link
+            onClick={toggleSidebar}
+            to="/contact"
+            className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
+          >
+            Kontakt
+          </Link>
+        </div>
       </div>
     </div>
   );
