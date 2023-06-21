@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { axiosInstance } from "../axios";
 import { Link } from "react-router-dom";
 import myLogo from "../images/logo.svg";
 
-const Navbar = () => {
+const Navbar = ({isUserLogged, setIsUserLogged}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(true);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -15,6 +16,19 @@ const Navbar = () => {
   };
   const hideProfileMenu = () => {
     setIsProfileMenuOpen(false);
+  };
+
+  const submitLogout = async (e) => {
+    e.preventDefault();
+    const response = await axiosInstance.post("user/logout/", {
+      withCredentials: true,
+    });
+    console.log(response.status);
+    if (response.status === 200) {
+      setIsUserLogged(false);
+    } else {
+      setIsUserLogged(false)
+    }
   };
 
   return (
@@ -97,7 +111,8 @@ const Navbar = () => {
                     </svg>
                   </Link>
                   {/* Profile Menu */}
-                  {isProfileMenuOpen && (
+                  {/* Unauthenticated user */}
+                  {!isUserLogged && isProfileMenuOpen && (
                     <div
                       className="absolute right-0 top-4 mt-2 py-2 w-48 bg-white rounded-md shadow-lg"
                       onMouseOver={showProfileMenu}
@@ -107,13 +122,34 @@ const Navbar = () => {
                         to="/login"
                         className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100  "
                       >
-                        Login
+                        Zaloguj
                       </Link>
                       <Link
                         to="/register"
                         className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100"
                       >
-                        Register
+                        Zarejestruj się
+                      </Link>
+                    </div>
+                  )}
+                  {/* Authenticated User */}
+                  {isUserLogged && isProfileMenuOpen && (
+                    <div
+                      className="absolute right-0 top-4 mt-2 py-2 w-48 bg-white rounded-md shadow-lg"
+                      onMouseOver={showProfileMenu}
+                      onMouseOut={hideProfileMenu}
+                    >
+                      <div
+                        onClick={submitLogout}
+                        className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 cursor-pointer  "
+                      >
+                        Wyloguj się
+                      </div>
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100"
+                      >
+                        Twój profil
                       </Link>
                     </div>
                   )}
