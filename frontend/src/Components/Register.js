@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import myLogo from "../images/logo.svg";
 import { axiosInstance } from "../axios";
 import { useNavigate } from "react-router-dom";
-import useIsLoggedIn from "../auth/isLoggedIn";
 
-const Login = () => {
+
+const Login = ({isUserLogged}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -45,7 +45,13 @@ const Login = () => {
       return;
     }
   };
-  useIsLoggedIn();
+
+  useEffect(() => {
+    if (isUserLogged) {
+      navigate("/");
+    }
+  });
+
   return (
     <div className="flex flex-col justify-center px-6 py-12 lg:px-8 h-4/5">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
