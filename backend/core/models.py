@@ -4,13 +4,16 @@ import os
 import uuid
 from datetime import date
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
 )
+from django.core.mail import send_mail
 from django.db import models
+from django.dispatch import receiver
+from django.urls import reverse
+from django_rest_passwordreset.signals import reset_password_token_created
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -158,3 +161,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
+@receiver(reset_password_token_created)
+def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+    """Function that reset password for User model."""
+    email_plaintext_message = "127.0.0.1:3000/profile/reset-password/?token={}".format(reset_password_token.key)
+    send_mail(
+        "Reset hasła na stronie VapeMate",
+        email_plaintext_message,
+        "noreply@example.com",
+        [reset_password_token.user.email]
+    )

@@ -13,6 +13,7 @@ import CategoryDetail from "./Components/CategoryDetail";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import RegisterConfirm from "./Components/RegisterConfirm";
+import ResetPassword from "./Components/ResetPassword";
 import { axiosInstance } from "./axios";
 export default function App() {
   const [isUserLogged, setIsUserLogged] = useState(false);
@@ -46,10 +47,23 @@ export default function App() {
         <Route path="/product/:productId" element={<ProductDetail />} />
         <Route
           path="/login"
-          element={<Login setIsUserLogged={setIsUserLogged} />}
+          element={
+            <Login
+              setIsUserLogged={setIsUserLogged}
+              isUserLogged={isUserLogged}
+            />
+          }
         />
-        <Route path="/register" element={<Register />} />
-        <Route path="/register-confirm" element={<RegisterConfirm />} />
+        <Route
+          path="/register"
+          element={<Register isUserLogged={isUserLogged} />}
+        />
+        <Route
+          path="/register-confirm"
+          element={<RegisterConfirm isUserLogged={isUserLogged} />}
+        />
+        <Route
+          path="/profile/reset-password/" element={<ResetPassword />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>

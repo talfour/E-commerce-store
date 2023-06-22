@@ -27,13 +27,13 @@ const ProductDetail = () => {
   const prevSlide = () => {
     const isFirstSlide = currentImageIndex === 0;
     const newIndex = isFirstSlide ? images.length - 1 : currentImageIndex - 1;
-    setCurrentImageIndex(newIndex)
+    setCurrentImageIndex(newIndex);
   };
 
   const nextSlide = () => {
-    const isLastSlide = currentImageIndex === images.length - 1
-    const newIndex = isLastSlide ? 0 : currentImageIndex + 1
-    setCurrentImageIndex(newIndex)
+    const isLastSlide = currentImageIndex === images.length - 1;
+    const newIndex = isLastSlide ? 0 : currentImageIndex + 1;
+    setCurrentImageIndex(newIndex);
   };
 
   useEffect(() => {
@@ -84,7 +84,7 @@ const ProductDetail = () => {
                 stroke="currentColor"
                 className="lg:hidden group-hover:block w-8 h-8 absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
                 onClick={prevSlide}
-                >
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -100,7 +100,7 @@ const ProductDetail = () => {
                 stroke="currentColor"
                 className="lg:hidden group-hover:block w-8 h-8 absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
                 onClick={nextSlide}
-                >
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
