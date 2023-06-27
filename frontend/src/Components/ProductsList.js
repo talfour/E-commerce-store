@@ -4,6 +4,7 @@ import Product from "./Product";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     getData();
@@ -18,6 +19,26 @@ const ProductsList = () => {
     }
   };
 
+  useEffect(() => {
+    const handleSearch = async () => {
+      if (searchQuery === "") {
+        getData();
+      } else if (searchQuery.length > 2) {
+        try {
+          const response = await axiosInstance.get(
+            `product/?search=${searchQuery}`
+          );
+          if (response.status === 200) {
+            setProducts(response.data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    handleSearch();
+  }, [searchQuery]);
+
   return (
     <main>
       <h1 className="text-center lg:text-5xl text-3xl pt-10 pb-10 font-roboto font-bold">
@@ -31,6 +52,7 @@ const ProductsList = () => {
             placeholder="Szukaj produktów..."
             aria-label="Search"
             aria-describedby="button-addon3"
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
 
           <button
