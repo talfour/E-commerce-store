@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-
+from django.db.models import Q
 from .serializers import BrandSerializer, CategorySerializer, ProductSerializer
 
 
@@ -63,7 +63,14 @@ class ProductViewSet(viewsets.ViewSet):
 
     @extend_schema(responses=ProductSerializer)
     def list(self, request):
+        search_query = request.query_params.get('search', None)
         queryset = models.Product.objects.all()
+
+        if search_query:
+            queryset= queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(description__icontains=search_query)
+            )
         serializer = ProductSerializer(
             queryset, many=True, context={"request": request}
         )
