@@ -23,7 +23,7 @@ const ProductsList = () => {
       <h1 className="text-center lg:text-5xl text-3xl pt-10 pb-10 font-roboto font-bold">
         Dostępne produkty:
       </h1>
-      <div class="my-3 lg:w-4/6 w-11/12 mx-auto">
+      <div class="my-3 lg:w-6/12 w-11/12 mx-auto">
         <div class="relative mb-4 flex w-full flex-wrap items-stretch">
           <input
             type="search"
