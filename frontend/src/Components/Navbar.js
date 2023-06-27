@@ -3,7 +3,7 @@ import { axiosInstance } from "../axios";
 import { Link } from "react-router-dom";
 import myLogo from "../images/logo.svg";
 
-const Navbar = ({isUserLogged, setIsUserLogged}) => {
+const Navbar = ({ isUserLogged, setIsUserLogged }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
@@ -27,7 +27,7 @@ const Navbar = ({isUserLogged, setIsUserLogged}) => {
     if (response.status === 200) {
       setIsUserLogged(false);
     } else {
-      setIsUserLogged(false)
+      setIsUserLogged(false);
     }
   };
 
@@ -50,11 +50,6 @@ const Navbar = ({isUserLogged, setIsUserLogged}) => {
                 <li>
                   <Link to="/category" className="hover:text-gray-200">
                     Kategorie
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/collection" className="hover:text-gray-200">
-                    Kolekcje
                   </Link>
                 </li>
                 <li>
@@ -239,13 +234,6 @@ const Navbar = ({isUserLogged, setIsUserLogged}) => {
             className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
           >
             Kategorie
-          </Link>
-          <Link
-            onClick={toggleSidebar}
-            to="/collection"
-            className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
-          >
-            Kolekcje
           </Link>
           <Link
             onClick={toggleSidebar}
