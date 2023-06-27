@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import myLogo from "../images/logo.svg";
+import myLogo from "../images/logo_black.svg";
 import { axiosInstance } from "../axios";
 import { useNavigate } from "react-router-dom";
 
@@ -53,11 +53,10 @@ const Login = ({isUserLogged}) => {
   });
 
   return (
-    <div className="flex flex-col justify-center px-6 py-12 lg:px-8 h-4/5">
+    <div className="w-[95%] lg:w-1/3 mx-auto mt-10 bg-white border border-gray-200 rounded-lg shadow flex flex-col justify-center px-6 py-12 lg:px-8 h-4/5">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
-          className="mx-auto h-10 w-auto"
-          style={{ backgroundColor: "black" }}
+          className="mx-auto h-28 w-auto"
           src={myLogo}
           alt="Your Company"
         />

@@ -168,7 +168,7 @@ const ProductDetail = () => {
                     -{" "}
                   </span>
                   <input
-                    className="h-8 w-8 border bg-white text-center text-xs outline-none"
+                    className="h-8 w-8 border-[#f3f4f6] bg-white text-center text-xs outline-none"
                     type="number"
                     value={quantity}
                     readOnly={true}
