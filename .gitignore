@@ -143,7 +143,7 @@ node_modules/
 ./node_modules/
 
 # Images
-backend/products
+backend/products/2023
 
 # TODOS
 TODO.md
