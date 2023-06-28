@@ -4,4 +4,3 @@ COPY ./frontend/package.json .
 COPY ./frontend/yarn.lock .
 COPY ./frontend .
 RUN yarn
-# RUN yarn build
