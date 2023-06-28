@@ -106,7 +106,7 @@ class ProductImagesTestCase(TestCase):
             price=Decimal("2.5"),
         )
         self.image = SimpleUploadedFile(
-            "example.jpg", b"file_content", content_type="image/jpeg"
+            "thenounproject.svg", b"file_content", content_type="image/svg+xml"
         )
 
     def test_product_image_creation(self):
