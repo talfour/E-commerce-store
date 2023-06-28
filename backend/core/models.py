@@ -1,5 +1,6 @@
 """Database models."""
 
+
 import os
 import uuid
 from datetime import date
@@ -12,7 +13,6 @@ from django.contrib.auth.models import (
 from django.core.mail import send_mail
 from django.db import models
 from django.dispatch import receiver
-from django.urls import reverse
 from django_rest_passwordreset.signals import reset_password_token_created
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -42,7 +42,6 @@ class Brand(models.Model):
         return self.name
 
 
-
 class Product(models.Model):
     """Model representing Product"""
 
@@ -50,7 +49,11 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     category = TreeForeignKey(
-        "Category", null=True, blank=True, on_delete=models.SET_NULL, related_name="products"
+        "Category",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="products",
     )
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)
@@ -69,7 +72,6 @@ class Product(models.Model):
             return request.build_absolute_uri(self.images.first().image.url)
 
 
-
 def upload_image(instance, filename):
     """Generate a UUID for the image filename."""
 
@@ -82,7 +84,9 @@ def upload_image(instance, filename):
 class ProductImages(models.Model):
     """Model representing product images"""
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="images"
+    )
     image = models.ImageField(upload_to=upload_image, blank=True)
 
 
@@ -112,6 +116,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     """Model representing items in order."""
+
     order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product, related_name="order_items", on_delete=models.CASCADE
@@ -132,7 +137,7 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_field):
         """Create, save and return a new user."""
         if not email:
-            raise ValueError('User must have an email address.')
+            raise ValueError("User must have an email address.")
         user = self.model(email=self.normalize_email(email), **extra_field)
         user.set_password(password)
         user.save(using=self._db)
@@ -159,15 +164,30 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
+
 
 @receiver(reset_password_token_created)
-def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+def password_reset_token_created(
+    sender, instance, reset_password_token, *args, **kwargs
+):
     """Function that reset password for User model."""
-    email_plaintext_message = "127.0.0.1:3000/profile/reset-password/?token={}".format(reset_password_token.key)
+    email_plaintext_message = "127.0.0.1:3000/profile/reset-password/?token={}".format(
+        reset_password_token.key
+    )
     send_mail(
         "Reset hasła na stronie VapeMate",
         email_plaintext_message,
         "noreply@example.com",
-        [reset_password_token.user.email]
+        [reset_password_token.user.email],
     )
+
+
+class UserAddress(models.Model):
+    """Model representing user address."""
+
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, null=True)
+    last_name = models.CharField(max_length=100)
+    address = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=100, null=True)
+    post_code = models.CharField(max_length=6, null=True)
