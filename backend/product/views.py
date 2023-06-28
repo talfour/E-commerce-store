@@ -1,10 +1,11 @@
 from core import models
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from django.db.models import Q
+
 from .serializers import BrandSerializer, CategorySerializer, ProductSerializer
 
 
@@ -46,7 +47,6 @@ class BrandViewSet(viewsets.ViewSet):
         AllowAny,
     ]
 
-
     @extend_schema(responses=BrandSerializer)
     def list(self, request):
         queryset = models.Brand.objects.all()
@@ -63,13 +63,12 @@ class ProductViewSet(viewsets.ViewSet):
 
     @extend_schema(responses=ProductSerializer)
     def list(self, request):
-        search_query = request.query_params.get('search', None)
-        queryset = models.Product.objects.all()
+        search_query = request.query_params.get("search", None)
+        queryset = models.Product.objects.select_related("brand").all()
 
         if search_query:
-            queryset= queryset.filter(
-                Q(name__icontains=search_query) |
-                Q(description__icontains=search_query)
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) | Q(description__icontains=search_query)
             )
         serializer = ProductSerializer(
             queryset, many=True, context={"request": request}

@@ -20,6 +20,7 @@ def create_category(**params):
     category = Category.objects.create(**defaults)
     return category
 
+
 def create_brand(**params):
     """Create and return a sample brand."""
     defaults = {"name": "Sample brand"}
@@ -124,7 +125,6 @@ class PublicCategoryAPITests(TestCase):
         """Test get product detail."""
         category = create_category()
         create_product(category=category)
-
 
         url = detail_category_url(category.id)
         res = self.client.get(url)
