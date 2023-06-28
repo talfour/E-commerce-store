@@ -1,16 +1,34 @@
 """
 Serializers for the user API View.
 """
+from core.models import UserAddress
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
+
+
+class UserAddressSerializer(serializers.ModelSerializer):
+    """Serializer for user address."""
+
+    class Meta:
+        model = UserAddress
+        fields = ["last_name", "address", "city", "post_code"]
 
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
 
+    address = UserAddressSerializer(many=False, required=False)
+
+    def get_address(self, user):
+        try:
+            user_address = UserAddress.objects.get(user=user)
+            return UserAddressSerializer(user_address).data
+        except UserAddress.DoesNotExist:
+            return None
+
     class Meta:
         model = get_user_model()
-        fields = ["email", "password", "name"]
+        fields = ["email", "password", "name", "address"]
         extra_kwargs = {"password": {"write_only": True, "min_length": 8}}
 
     def create(self, validated_data):
