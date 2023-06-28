@@ -48,7 +48,7 @@ const ProductsList = () => {
         <div class="relative mb-4 flex w-full flex-wrap items-stretch">
           <input
             type="search"
-            class="relative text-center bg-white text-black m-0 -mr-0.5 block w-[1px] min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.25rem]  font-normal leading-[1.6] outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-black focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600"
+            class="relative text-center bg-white text-black m-0 -mr-0.5 block w-[1px] min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.25rem]  font-normal leading-[1.6] outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-black focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
             placeholder="Szukaj produktów..."
             aria-label="Search"
             aria-describedby="button-addon3"
