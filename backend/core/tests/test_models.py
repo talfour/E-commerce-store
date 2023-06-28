@@ -1,4 +1,7 @@
 """Tests for models."""
+import os
+import shutil
+import tempfile
 from decimal import Decimal
 
 from core.models import Brand, Category, Order, OrderItem, Product, ProductImages
@@ -105,14 +108,25 @@ class ProductImagesTestCase(TestCase):
             category=self.category,
             price=Decimal("2.5"),
         )
+        self.temp_dir = tempfile.mkdtemp()
         self.image = SimpleUploadedFile(
             "thenounproject.svg", b"file_content", content_type="image/svg+xml"
         )
 
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
+
     def test_product_image_creation(self):
-        image = ProductImages.objects.create(product=self.product, image=self.image)
+        image_path = os.path.join(self.temp_dir, "thenounproject.svg")
+        with open(image_path, "wb") as f:
+            f.write(b"file_content")
+        image = ProductImages.objects.create(product=self.product, image=image_path)
         self.assertEqual(image.product, self.product)
 
     def test_related_name(self):
-        image = ProductImages.objects.create(product=self.product, image=self.image)
+        image_path = os.path.join(self.temp_dir, "thenounproject.svg")
+        with open(image_path, "wb") as f:
+            f.write(b"file_content")
+
+        image = ProductImages.objects.create(product=self.product, image=image_path)
         self.assertIn(image, self.product.images.all())
