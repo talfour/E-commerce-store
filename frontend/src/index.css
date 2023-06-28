@@ -96,3 +96,12 @@ nav {
 .close-button:hover {
   background-color: #e1e1e1;
 }
+
+@media (max-width: 768px) {
+  .btn-close {
+    right: calc(7% - 28px);
+  }
+  .box {
+    width: 90%;
+  }
+}
