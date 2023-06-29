@@ -97,7 +97,7 @@ class Order(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
     address = models.CharField(max_length=250)
-    postal_code = models.CharField(max_length=20)
+    post_code = models.CharField(max_length=20)
     city = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -186,8 +186,13 @@ def password_reset_token_created(
 class UserAddress(models.Model):
     """Model representing user address."""
 
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    address = models.CharField(max_length=255, null=True)
-    city = models.CharField(max_length=100, null=True)
-    post_code = models.CharField(max_length=6, null=True)
+    address = models.CharField(max_length=255)
+    address2 = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=100)
+    post_code = models.CharField(max_length=6)
+
+    def __str__(self):
+        return str(self.user)
