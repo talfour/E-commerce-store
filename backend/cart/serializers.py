@@ -38,7 +38,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "address",
-            "postal_code",
+            "post_code",
             "city",
             "created",
             "updated",
