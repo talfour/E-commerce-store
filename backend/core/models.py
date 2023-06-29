@@ -186,7 +186,7 @@ def password_reset_token_created(
 class UserAddress(models.Model):
     """Model representing user address."""
 
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
     last_name = models.CharField(max_length=100)
     address = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=100, null=True)
