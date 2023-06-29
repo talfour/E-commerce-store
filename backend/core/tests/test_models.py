@@ -61,7 +61,7 @@ class OrderItemModelTest(TestCase):
             last_name="User",
             email="test@example.com",
             address="123",
-            postal_code="12345",
+            post_code="12345",
             city="Test",
         )
         brand = Brand.objects.create(name="Apple")
