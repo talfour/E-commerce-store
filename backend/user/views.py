@@ -1,14 +1,15 @@
 """
 Views for the user API.
 """
+from core.models import UserAddress
 from django.contrib.auth import login, logout
 from drf_spectacular.utils import extend_schema
-from rest_framework import permissions, status
+from rest_framework import permissions, status, viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import UserLoginSerializer, UserSerializer
+from .serializers import UserAddressSerializer, UserLoginSerializer, UserSerializer
 
 
 class UserRegister(APIView):
@@ -94,3 +95,17 @@ class UserLogout(APIView):
     def post(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
+
+
+class UserAddressViewSet(viewsets.ModelViewSet):
+    """View for managing user addresses"""
+
+    serializer_class = UserAddressSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return UserAddress.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
