@@ -1,25 +1,24 @@
+from core import models
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Brand, Category, Order, OrderItem, Product, ProductImages, User
 
-
-@admin.register(Category)
+@admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ["name"]
 
 
-@admin.register(Brand)
+@admin.register(models.Brand)
 class BrandAdmin(admin.ModelAdmin):
     list_display = ["name"]
 
 
 class ProductImagesInline(admin.StackedInline):
-    model = ProductImages
+    model = models.ProductImages
 
 
-@admin.register(Product)
+@admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ["name", "price", "available", "created", "updated"]
     list_filter = ["available", "created", "updated"]
@@ -28,11 +27,11 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class OrderItemInline(admin.TabularInline):
-    model = OrderItem
+    model = models.OrderItem
     raw_id_fields = ["product"]
 
 
-@admin.register(Order)
+@admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "id",
@@ -50,7 +49,7 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
 
 
-@admin.register(User)
+@admin.register(models.User)
 class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users."""
 
@@ -70,7 +69,9 @@ class UserAdmin(BaseUserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login",)}),
     )
-    readonly_fields = ["last_login"]
+    readonly_fields = [
+        "last_login",
+    ]
     add_fieldsets = (
         (
             None,
