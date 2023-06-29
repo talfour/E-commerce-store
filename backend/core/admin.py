@@ -39,7 +39,7 @@ class OrderAdmin(admin.ModelAdmin):
         "last_name",
         "email",
         "address",
-        "postal_code",
+        "post_code",
         "city",
         "paid",
         "created",
@@ -47,6 +47,11 @@ class OrderAdmin(admin.ModelAdmin):
     ]
     list_filter = ["paid", "created", "updated"]
     inlines = [OrderItemInline]
+
+
+@admin.register(models.UserAddress)
+class UserAddressAdmin(admin.ModelAdmin):
+    list_display = ["user", "first_name", "last_name", "address", "address2", "post_code", "city"]
 
 
 @admin.register(models.User)
