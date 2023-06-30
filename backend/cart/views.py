@@ -10,6 +10,7 @@ from .serializers import CartSerializer, OrderSerializer
 
 
 class CartView(viewsets.ViewSet):
+    "View for shopping cart stored in session."
     permission_classes = [
         AllowAny,
     ]
@@ -82,7 +83,7 @@ class CartView(viewsets.ViewSet):
 
 
 class OrderCreateView(viewsets.ModelViewSet):
-    # queryset = Order.objects.none()
+    """View for creating a new order in the system."""
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     model = Order
