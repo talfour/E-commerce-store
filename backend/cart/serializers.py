@@ -16,10 +16,7 @@ class CartSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         """Convert the Cart object to a list of items"""
-        items = []
-        for key, value in instance.items():
-            item_data = {key: str(value)}
-            items.append(item_data)
+        items = [{key: str(value)} for key, value in instance.items()]
         return items
 
 
