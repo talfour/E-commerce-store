@@ -1,20 +1,28 @@
 """
 Tests for the user API.
 """
+from core import models
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
+from user.serializers import UserAddressSerializer
 
 CREATE_USER_URL = reverse("user:register")
 LOGIN_USER_URL = reverse("user:login")
 ME_URL = reverse("user:me")
+ADDRESS_URL = reverse("user:address")
 
 
 def create_user(**params):
     """Create and return a new user."""
     return get_user_model().objects.create_user(**params)
+
+
+def address_detail_url(address_id):
+    """Create and return a address detail url."""
+    return reverse("user:address-detail", args=[address_id])
 
 
 class PublicUserApiTests(TestCase):
@@ -77,6 +85,11 @@ class PublicUserApiTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue("_auth_user_id" in self.client.session)
 
+    def test_user_access_address_raise_403_error(self):
+        """Test unauthenticated user try to access address url."""
+        response = self.client.get(ADDRESS_URL)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class PrivateUserApiTests(TestCase):
     """Test the private features of the user API."""
@@ -121,3 +134,92 @@ class PrivateUserApiTests(TestCase):
         res = self.client.post(ME_URL, {})
 
         self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_user_create_new_shipping_address(self):
+        """Test create user new shipping address."""
+        payload = {
+            "user": self.user,
+            "first_name": "Test Name",
+            "last_name": "Test Last Name",
+            "address": "123 Norris",
+            "city": "City",
+            "post_code": "XX-XXX",
+        }
+
+        res = self.client.post(ADDRESS_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+    def test_retrieve_addresses(self):
+        """Test retrieving a list of addresses."""
+        models.UserAddress.objects.create(
+            user=self.user,
+            first_name="test name",
+            last_name="last name",
+            address="123 Street",
+            city="City",
+            post_code="XX-XXX",
+        )
+        models.UserAddress.objects.create(
+            user=self.user,
+            first_name="second name",
+            last_name="another name",
+            address="123 Street",
+            city="Town",
+            post_code="YY-YYY",
+        )
+
+        res = self.client.get(ADDRESS_URL)
+
+        addresses = models.UserAddress.objects.all()
+        serializer = UserAddressSerializer(addresses, many=True)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data, serializer.data)
+
+    def test_address_limited_to_user(self):
+        """Test list of addresses is limited to authenticated user."""
+        user2 = create_user(email="user2@example.com")
+        models.UserAddress.objects.create(
+            user=user2,
+            first_name="test name",
+            last_name="last name",
+            address="123 Street",
+            city="City",
+            post_code="XX-XXX",
+        )
+        address = models.UserAddress.objects.create(
+            user=self.user,
+            first_name="second name",
+            last_name="another name",
+            address="123 Street",
+            city="Town",
+            post_code="YY-YYY",
+        )
+
+        res = self.client.get(ADDRESS_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+        self.assertEqual(res.data[0]["first_name"], address.first_name)
+        self.assertEqual(res.data[0]["id"], address.id)
+
+    def test_update_address(self):
+        """Test updating an address."""
+        address = models.UserAddress.objects.create(
+            user=self.user,
+            first_name="second name",
+            last_name="another name",
+            address="123 Street",
+            city="Town",
+            post_code="YY-YYY",
+        )
+
+        payload = {"first_name": "updated name", "post_code": "ZZ-ZZZ"}
+        url = address_detail_url(address.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        address.refresh_from_db()
+        self.assertEqual(address.first_name, payload["first_name"])
+        self.assertEqual(address.post_code, payload["post_code"])
