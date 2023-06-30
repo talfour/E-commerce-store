@@ -4,7 +4,15 @@ import shutil
 import tempfile
 from decimal import Decimal
 
-from core.models import Brand, Category, Order, OrderItem, Product, ProductImages
+from core.models import (
+    Brand,
+    Category,
+    Order,
+    OrderItem,
+    Product,
+    ProductImages,
+    UserAddress,
+)
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -42,6 +50,23 @@ class UserModelTests(TestCase):
         """Test that creating a user without an email raises a ValueError."""
         with self.assertRaises(ValueError):
             get_user_model().objects.create_user("", "test123")
+
+    def test_new_user_shipping_address_added_successful(self):
+        """Test that creating a new shipping address is successful."""
+        user = get_user_model().objects.create_user(
+            email="test@example.com",
+            password="testpass123",
+        )
+        address = UserAddress.objects.create(
+            user=user,
+            first_name="Test Name",
+            last_name="Test Last Name",
+            address="Address 123",
+            city="City",
+            post_code="XX-XXX",
+        )
+        self.assertEqual(address.user, user)
+        self.assertEqual(str(address), address.user.email)
 
     def test_create_superuser(self):
         """Test creating a superuser."""
