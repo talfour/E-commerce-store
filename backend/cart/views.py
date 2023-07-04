@@ -82,15 +82,34 @@ class CartView(viewsets.ViewSet):
         return Response({"cart_items": cart_items, "total_price": total_price})
 
 
-class OrderCreateView(viewsets.ModelViewSet):
-    """View for creating a new order in the system."""
+class OrderView(viewsets.ModelViewSet):
+    """View for creating, retrieving and listing an order in the system."""
+
+    permission_classes = [
+        AllowAny,
+    ]
+
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     model = Order
 
+    def list(self, request):
+        queryset = Order.objects.filter(user=request.user)
+        serializer = OrderSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, pk=None):
+        queryset = Order.objects.get(user=request.user, pk=pk)
+        serializer = OrderSerializer(queryset)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def create(self, request):
         cart = Cart(request)
-        serializer = OrderSerializer(data=request.data)
+        # Get current user if user is not authenticated let user to create an order anyway but User won't be able to track order in profile menu.
+        user = request.user if request.user.is_authenticated else None
+        serializer = OrderSerializer(
+            data=request.data, context={"request": request, "user": user}
+        )
         if serializer.is_valid():
             order = serializer.save()
             for item in cart:
