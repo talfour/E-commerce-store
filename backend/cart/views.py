@@ -105,7 +105,8 @@ class OrderView(viewsets.ModelViewSet):
 
     def create(self, request):
         cart = Cart(request)
-        # Get current user if user is not authenticated let user to create an order anyway but User won't be able to track order in profile menu.
+        # Get current user if user is not authenticated let user to create an
+        # order anyway but User won't be able to track order in profile menu.
         user = request.user if request.user.is_authenticated else None
         serializer = OrderSerializer(
             data=request.data, context={"request": request, "user": user}
