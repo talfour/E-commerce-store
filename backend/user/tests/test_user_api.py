@@ -103,7 +103,7 @@ class PrivateUserApiTests(TestCase):
         url = reverse("user:logout")
         response = self.client.post(url)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse("_auth_user_id" in self.client.session)
 
     def test_get_user_info(self):
