@@ -12,7 +12,7 @@ router.register(r"category", views.CategoryViewSet, basename="category")
 router.register(r"brand", views.BrandViewSet, basename="brand")
 router.register(r"product", views.ProductViewSet, basename='product')
 router.register(r"cart", c_views.CartView, basename="cart")
-router.register(r"order", c_views.OrderCreateView, basename="order")
+router.register(r"order", c_views.OrderView, basename="order")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
