@@ -10,12 +10,11 @@ from .serializers import BrandSerializer, CategorySerializer, ProductSerializer
 
 
 class CategoryViewSet(viewsets.ViewSet):
-    """Simple Viewset for viewing categories."""
+    """
+    Simple Viewset for viewing categories.
+    """
 
-    permission_classes = [
-        AllowAny,
-    ]
-
+    permission_classes = [AllowAny]
     serializer_class = CategorySerializer()
 
     @extend_schema(responses=CategorySerializer)
@@ -25,10 +24,7 @@ class CategoryViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        try:
-            category = models.Category.objects.get(pk=pk)
-        except models.Category.DoesNotExist:
-            return Response({"detail": "Category not found"}, status=404)
+        category = get_object_or_404(models.Category, pk=pk)
         serializer = CategorySerializer(category)
         category_data = serializer.data
 
@@ -41,11 +37,11 @@ class CategoryViewSet(viewsets.ViewSet):
 
 
 class BrandViewSet(viewsets.ViewSet):
-    """Simple Viewset for viewing brands."""
+    """
+    Simple Viewset for viewing brands.
+    """
 
-    permission_classes = [
-        AllowAny,
-    ]
+    permission_classes = [AllowAny]
 
     @extend_schema(responses=BrandSerializer)
     def list(self, request):
@@ -55,16 +51,16 @@ class BrandViewSet(viewsets.ViewSet):
 
 
 class ProductViewSet(viewsets.ViewSet):
-    """Simple Viewset for viewing all products."""
+    """
+    Simple Viewset for viewing all products.
+    """
 
-    permission_classes = [
-        AllowAny,
-    ]
+    permission_classes = [AllowAny]
 
     @extend_schema(responses=ProductSerializer)
     def list(self, request):
         search_query = request.query_params.get("search", None)
-        queryset = models.Product.objects.select_related("brand").all()
+        queryset = models.Product.objects.prefetch_related("brand").all()
 
         if search_query:
             queryset = queryset.filter(
@@ -77,7 +73,6 @@ class ProductViewSet(viewsets.ViewSet):
 
     @extend_schema(responses=ProductSerializer)
     def retrieve(self, request, pk=None):
-        queryset = models.Product.objects.all()
-        product = get_object_or_404(queryset, pk=pk)
+        product = get_object_or_404(models.Product, pk=pk)
         serializer = ProductSerializer(product, context={"request": request})
         return Response(serializer.data)
