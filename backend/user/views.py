@@ -21,7 +21,7 @@ class UserRegister(APIView):
         request=UserSerializer,
         operation_id="Register User",
         responses={200: UserSerializer},
-        tags=["User"],
+        tags=["user"],
     )
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -42,7 +42,7 @@ class UserLogin(APIView):
         request=UserLoginSerializer,
         operation_id="Login User",
         responses={200: UserLoginSerializer},
-        tags=["User"],
+        tags=["user"],
     )
     def post(self, request):
         data = request.data
@@ -63,7 +63,7 @@ class UserView(APIView):
         request=UserSerializer,
         operation_id="Shows User info.",
         responses={200: UserSerializer},
-        tags=["User"],
+        tags=["user"],
     )
     def get(self, request):
         serializer = UserSerializer(request.user)
@@ -73,7 +73,7 @@ class UserView(APIView):
         request=UserSerializer,
         operation_id="Update User info.",
         responses={200: UserSerializer},
-        tags=["User"],
+        tags=["user"],
     )
     def patch(self, request):
         serializer = UserSerializer(request.user, data=request.data, partial=True)
@@ -90,11 +90,11 @@ class UserLogout(APIView):
         request=None,
         operation_id="Logout User",
         responses={200: UserSerializer},
-        tags=["User"],
+        tags=["user"],
     )
     def post(self, request):
         logout(request)
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserAddressViewSet(viewsets.ModelViewSet):
