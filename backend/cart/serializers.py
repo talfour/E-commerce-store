@@ -37,7 +37,17 @@ class OrderSerializer(serializers.ModelSerializer):
             "address",
             "post_code",
             "city",
+            "user",
             "created",
             "updated",
             "paid",
         )
+
+    def to_representation(self, instance):
+        """User to representation instead of
+        user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+        as view wouldn't allow AnonymousUser to create an order.
+        """
+        if "request" in self.context:
+            self.fields["user"].context["request"] = self.context["request"]
+        return super().to_representation(instance)
