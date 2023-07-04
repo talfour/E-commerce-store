@@ -14,7 +14,7 @@ class BrandAdmin(admin.ModelAdmin):
     list_display = ["name"]
 
 
-class ProductImagesInline(admin.StackedInline):
+class ProductImagesInline(admin.TabularInline):
     model = models.ProductImages
 
 
@@ -47,11 +47,20 @@ class OrderAdmin(admin.ModelAdmin):
     ]
     list_filter = ["paid", "created", "updated"]
     inlines = [OrderItemInline]
+    search_fields = ["id", "email"]
 
 
 @admin.register(models.UserAddress)
 class UserAddressAdmin(admin.ModelAdmin):
-    list_display = ["user", "first_name", "last_name", "address", "address2", "post_code", "city"]
+    list_display = [
+        "user",
+        "first_name",
+        "last_name",
+        "address",
+        "address2",
+        "post_code",
+        "city",
+    ]
 
 
 @admin.register(models.User)
