@@ -14,6 +14,7 @@ import Register from "./Components/Register";
 import RegisterConfirm from "./Components/RegisterConfirm";
 import ResetPassword from "./Components/ResetPassword";
 import { axiosInstance } from "./axios";
+import Orders from "./Components/Orders";
 export default function App() {
   const [isUserLogged, setIsUserLogged] = useState(false);
 
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/shopping-cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
+        <Route path="orders" element={<Orders />} />
         <Route
           path="/login"
           element={
