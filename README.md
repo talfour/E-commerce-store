@@ -57,8 +57,7 @@ Make sure you have docker and docker-compose installed.
 Clone repository and run following commands:
 
 ```bash
-docker-compose build &&
-docker-compose up
+docker-compose up --build
 ```
 
 ## To make sure everything works correctly
