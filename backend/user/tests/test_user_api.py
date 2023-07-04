@@ -36,7 +36,6 @@ class PublicUserApiTests(TestCase):
         payload = {
             "email": "test@example.com",
             "password": "testpass123",
-            "name": "Test Name",
         }
         res = self.client.post(CREATE_USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
@@ -49,7 +48,6 @@ class PublicUserApiTests(TestCase):
         payload = {
             "email": "test@example.com",
             "password": "testpass123",
-            "name": "Test User",
         }
         create_user(**payload)
         res = self.client.post(CREATE_USER_URL, payload)
@@ -61,7 +59,6 @@ class PublicUserApiTests(TestCase):
         payload = {
             "email": "test@example.com",
             "password": "pass123",
-            "name": "Test name",
         }
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -74,7 +71,6 @@ class PublicUserApiTests(TestCase):
         user_details = {
             "email": "test@example.com",
             "password": "testpass123",
-            "name": "Test name",
         }
         create_user(**user_details)
         payload = {"email": user_details["email"], "password": user_details["password"]}
@@ -96,7 +92,7 @@ class PrivateUserApiTests(TestCase):
 
     def setUp(self):
         self.user = create_user(
-            email="test@example.com", password="testpass123", name="Test name"
+            email="test@example.com", password="testpass123"
         )
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
@@ -115,17 +111,16 @@ class PrivateUserApiTests(TestCase):
         response = self.client.get(ME_URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            response.data, {"name": self.user.name, "email": self.user.email}
+            response.data, {"email": self.user.email}
         )
 
     def test_update_user_profile(self):
         """Test updating the user profile for the authenticated user."""
-        payload = {"name": "Updated new name.", "password": "newpassword123"}
+        payload = {"password": "newpassword123"}
 
         res = self.client.patch(ME_URL, payload)
 
         self.user.refresh_from_db()
-        self.assertEqual(self.user.name, payload["name"])
         self.assertTrue(self.user.check_password(payload["password"]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 

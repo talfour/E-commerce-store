@@ -9,7 +9,6 @@ const Login = ({isUserLogged}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [name, setName] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [matchError, setMatchError] = useState("");
   const [registerError, setRegisterError] = useState("");
@@ -34,7 +33,6 @@ const Login = ({isUserLogged}) => {
       const response = await axiosInstance.post("user/register/", {
         email: email,
         password: password,
-        name: name,
       });
       if (response.status === 201) {
         navigate("/register-confirm");
@@ -92,26 +90,7 @@ const Login = ({isUserLogged}) => {
               )}
             </div>
           </div>
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Imię
-            </label>
-            <div className="mt-2">
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                id="name"
-                name="name"
-                type="text"
-                required
-                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
-                `}
-              />
-            </div>
-          </div>
+
 
           <div>
             <div className="flex items-center justify-between">
