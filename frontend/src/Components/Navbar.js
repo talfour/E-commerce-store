@@ -134,18 +134,24 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
                       onMouseOver={showProfileMenu}
                       onMouseOut={hideProfileMenu}
                     >
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100"
+                      >
+                        Profil
+                      </Link>
+                      <Link
+                        to="/orders"
+                        className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100"
+                      >
+                        Zamówienia
+                      </Link>
                       <div
                         onClick={submitLogout}
                         className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 cursor-pointer  "
                       >
                         Wyloguj się
                       </div>
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100"
-                      >
-                        Twój profil
-                      </Link>
                     </div>
                   )}
                 </div>
