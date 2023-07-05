@@ -110,7 +110,7 @@ class PublicCategoryAPITests(TestCase):
         res = self.client.get(CATEGORIES_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def test_retrive_categories(self):
+    def test_retrieve_categories(self):
         create_category()
         create_category(name="Another category")
 
@@ -122,15 +122,20 @@ class PublicCategoryAPITests(TestCase):
         self.assertEqual(res.data, serializer.data)
 
     def test_get_category_detail(self):
-        """Test get product detail."""
+        """Test get category detail."""
         category = create_category()
         create_product(category=category)
 
         url = detail_category_url(category.id)
         res = self.client.get(url)
 
-        serializer = CategorySerializer(category)
-        self.assertEqual(res.data, serializer.data)
+        expected_data = {
+            'id': category.id,
+            'name': category.name,
+            'products': [dict(product) for product in CategorySerializer(category).data['products']],
+            'children': []
+        }
+        self.assertEqual(res.data, expected_data)
 
 
 class PublicBrandAPITests(TestCase):
