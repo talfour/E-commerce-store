@@ -18,7 +18,7 @@ const Categories = () => {
   };
 
   return (
-    <section className="text-gray-700 body-font overflow-hidden bg-white h-fit mt-20">
+    <section className="text-gray-700 body-font overflow-hidden bg-white h-[80vh] mt-20">
       <div className="px-5 py-24 my-auto">
         <ul className="text-center">
           {categories.map((category) => (
