@@ -29,6 +29,13 @@ nav {
   }
 }
 
+ul.tree-list li::before{
+  content: "-";
+  position: absolute;
+  margin-left: -1rem;
+
+}
+
 .popup-box {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.5);

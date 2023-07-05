@@ -37,30 +37,37 @@ const CategoryDetail = () => {
       {isLoaded && (
         <>
           <h1 className="pt-5 text-center text-2xl">{categoryName}</h1>
-          {categoryProducts.length > 0
-            ? categoryProducts.map((product) => (
+          {categoryProducts.length > 0 ? (
+            <div className="flex justify-center">
+              {categoryProducts.map((product) => (
                 <div key={product.id}>
                   <div className="flex items-center p-4 gap-4 flex-wrap align-middle justify-center">
                     <Product key={product.id} product={product} />
                   </div>
                 </div>
               ))
-            : ""}
-          {children.length > 0 ? (
-            children.map((child) => (
-              <div key={child.id}>
-                <h2 className="pt-5 text-center text-2xl">{child.name}</h2>
-                <div className="flex items-center p-4 gap-4 flex-wrap align-middle justify-center">
-                  {child.products.map((product) => (
-                    <Product key={product.id} product={product} />
-                  ))}
+              }</div>
+          ) : (
+            ""
+          )}
+          {children.length > 0
+            ?
+            <div className="flex justify-center">
+              {children.map((child) => (
+                <div key={child.id}>
+                  <h2 className="pt-5 text-center text-2xl">{child.products.length > 0 && child.name}</h2>
+                  <div className="flex items-center p-4 gap-4 flex-wrap align-middle justify-center">
+                    {child.products.map((product) => (
+                      <Product key={product.id} product={product} />
+                    ))}
+                  </div>
                 </div>
+              ))}
               </div>
-            ))
-          ) : ""}
+            : ""}
         </>
       )}
-      {isNotFound && <p>Category not found.</p>}
+      {isNotFound && <p>Taka kategoria nie istnieje.</p>}
     </div>
   );
 };
