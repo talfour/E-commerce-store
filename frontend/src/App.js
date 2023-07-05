@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
-import Contact from "./Components/Contact";
 import Categories from "./Components/Categories";
 import Cart from "./Components/Cart";
 import Profile from "./Components/Profile";
@@ -34,11 +33,10 @@ export default function App() {
     isLogged();
   }, []);
   return (
-    <div className="App font-roboto bg-gray-100 h-screen">
+    <div className="App font-roboto bg-gray-100 h-[100vh]">
       <Navbar isUserLogged={isUserLogged} setIsUserLogged={setIsUserLogged} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/contact" element={<Contact />} />
         <Route path="/category" element={<Categories />} />
         <Route path="/category/:categoryId" element={<CategoryDetail />} />
         <Route path="/shopping-cart" element={<Cart />} />

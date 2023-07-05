@@ -52,11 +52,6 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
                     Kategorie
                   </Link>
                 </li>
-                <li>
-                  <Link to="/contact" className="hover:text-gray-200">
-                    Kontakt
-                  </Link>
-                </li>
               </ul>
               {/* Right icons */}
               <div className="hidden xl:flex items-center space-x-5">
@@ -247,13 +242,6 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
             className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
           >
             Profil
-          </Link>
-          <Link
-            onClick={toggleSidebar}
-            to="/contact"
-            className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
-          >
-            Kontakt
           </Link>
         </div>
       </div>
