@@ -95,12 +95,12 @@ class OrderView(viewsets.ModelViewSet):
 
     def list(self, request):
         queryset = Order.objects.filter(user=request.user)
-        serializer = OrderSerializer(queryset, many=True)
+        serializer = OrderSerializer(queryset, many=True, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
         queryset = Order.objects.get(user=request.user, pk=pk)
-        serializer = OrderSerializer(queryset)
+        serializer = OrderSerializer(queryset, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
@@ -108,11 +108,12 @@ class OrderView(viewsets.ModelViewSet):
         # Get current user if user is not authenticated let user to create an
         # order anyway but User won't be able to track order in profile menu.
         user = request.user if request.user.is_authenticated else None
+        print(user)
         serializer = OrderSerializer(
             data=request.data, context={"request": request, "user": user}
         )
         if serializer.is_valid():
-            order = serializer.save()
+            order = serializer.save(user=user)
             for item in cart:
                 OrderItem.objects.create(
                     order=order,
