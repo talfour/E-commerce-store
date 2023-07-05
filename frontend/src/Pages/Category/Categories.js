@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { axiosInstance } from "../axios";
+import { axiosInstance } from "../../axios";
 const Categories = () => {
   const [categories, setCategories] = useState([]);
 

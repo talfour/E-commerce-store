@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import defaultImage from "../images/thenounproject.svg";
-import { axiosInstance } from "../axios";
+import defaultImage from "../../assets/thenounproject.svg";
+import { axiosInstance } from "../../axios";
 
 const Product = ({ product }) => {
   const productImage = product.images[0]?.image

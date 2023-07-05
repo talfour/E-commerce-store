@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../axios";
-import defaultImage from "../images/thenounproject.svg";
+import defaultImage from "../assets/thenounproject.svg";
 import Popup from "./Popup";
 
 const Cart = () => {

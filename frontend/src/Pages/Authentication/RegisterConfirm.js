@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import myLogo from "../images/logo_black.svg";
+import myLogo from "../../assets/logo_black.svg";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { axiosInstance } from "../axios";
 import { Link } from "react-router-dom";
-import myLogo from "../images/logo.svg";
+import myLogo from "../assets/logo.svg";
 
 const Navbar = ({ isUserLogged, setIsUserLogged }) => {
   const [isOpen, setIsOpen] = useState(false);

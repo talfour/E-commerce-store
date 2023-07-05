@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar";
-import Home from "./Components/Home";
-import Categories from "./Components/Categories";
+import Home from "./Pages/Home";
+import Categories from "./Pages/Category/Categories";
 import Cart from "./Components/Cart";
 import Profile from "./Components/Profile";
-import PageNotFound from "./Components/PageNotFound";
-import ProductDetail from "./Components/ProductDetail";
-import CategoryDetail from "./Components/CategoryDetail";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
-import RegisterConfirm from "./Components/RegisterConfirm";
-import ResetPassword from "./Components/ResetPassword";
+import PageNotFound from "./Pages/PageNotFound";
+import ProductDetail from "./Pages/Product/ProductDetail";
+import CategoryDetail from "./Pages/Category/CategoryDetail";
+import Login from "./Pages/Authentication/Login";
+import Register from "./Pages/Authentication/Register";
+import RegisterConfirm from "./Pages/Authentication/RegisterConfirm";
+import ResetPassword from "./Pages/Authentication/ResetPassword";
 import { axiosInstance } from "./axios";
 import Orders from "./Components/Orders";
 export default function App() {

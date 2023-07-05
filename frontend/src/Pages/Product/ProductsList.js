@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { axiosInstance } from "../axios";
+import { axiosInstance } from "../../axios";
 import Product from "./Product";
 
 const ProductsList = () => {

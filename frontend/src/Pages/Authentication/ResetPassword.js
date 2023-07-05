@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { axiosInstance } from "../axios";
-import myLogo from "../images/logo_black.svg";
+import { axiosInstance } from "../../axios";
+import myLogo from "../../assets/logo_black.svg";
 import { Link } from "react-router-dom";
 
 const ResetPassword = () => {

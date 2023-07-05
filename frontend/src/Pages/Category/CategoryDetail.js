@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { axiosInstance } from "../axios";
-import Product from "./Product";
+import { axiosInstance } from "../../axios";
+import Product from "../Product/Product";
 
 const CategoryDetail = () => {
   const [categoryName, setCategoryName] = useState();

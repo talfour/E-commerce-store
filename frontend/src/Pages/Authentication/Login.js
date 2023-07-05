@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import myLogo from "../images/logo_black.svg";
-import { axiosInstance } from "../axios";
+import myLogo from "../../assets/logo_black.svg";
+import { axiosInstance } from "../../axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
