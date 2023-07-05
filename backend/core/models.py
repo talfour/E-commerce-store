@@ -113,8 +113,10 @@ class Order(models.Model):
         return "Order {}".format(self.id)
 
     def get_total_cost(self):
-        total_cost = self.items.aggregate(total_cost=Sum("price"))["total_cost"]
-        return total_cost or 0
+        total_cost = self.items.aggregate(total_cost=Sum("cost"))["total_cost"]
+        if total_cost != 0:
+            total_cost = '{:0.2f}'.format(total_cost)
+        return total_cost or Decimal(0)
 
 
 class OrderItem(models.Model):
