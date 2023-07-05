@@ -1,5 +1,6 @@
 from core.models import Order, OrderItem
 from drf_spectacular.utils import extend_schema_field
+from product.serializers import ProductSerializer
 from rest_framework import serializers
 
 
@@ -21,12 +22,17 @@ class CartSerializer(serializers.Serializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+
     class Meta:
         model = OrderItem
         fields = ("id", "product", "price", "quantity")
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True, required=False)
+    total_cost = serializers.SerializerMethodField()
+
     class Meta:
         model = Order
         fields = (
@@ -41,6 +47,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "created",
             "updated",
             "paid",
+            "items",
+            "total_cost",
         )
 
     def __init__(self, *args, **kwargs):
@@ -48,3 +56,6 @@ class OrderSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         if request is not None:
             self.fields["user"].context["request"] = request
+
+    def get_total_cost(self, obj):
+        return obj.get_total_cost()
