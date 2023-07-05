@@ -28,6 +28,12 @@ class CategoryViewSet(viewsets.ViewSet):
         serializer = CategorySerializer(category)
         category_data = serializer.data
 
+        child_categories = models.Category.objects.filter(parent=category)
+        child_category_serializer = CategorySerializer(
+            child_categories, many=True, context={"request": request}
+        )
+        category_data["children"] = child_category_serializer.data
+
         products = models.Product.objects.filter(category=category)
         product_serializer = ProductSerializer(
             products, many=True, context={"request": request}
