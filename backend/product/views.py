@@ -6,7 +6,12 @@ from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from .serializers import BrandSerializer, CategorySerializer, ProductSerializer
+from .serializers import (
+    BrandSerializer,
+    CategoryAndChildSerializer,
+    CategorySerializer,
+    ProductSerializer,
+)
 
 
 class CategoryViewSet(viewsets.ViewSet):
@@ -40,6 +45,32 @@ class CategoryViewSet(viewsets.ViewSet):
         )
         category_data["products"] = product_serializer.data
         return Response(category_data)
+
+
+class CategoryChildrenView(viewsets.ViewSet):
+    """
+    Viewset for listing unique categories that are under parent.
+    """
+
+    def list(self, request):
+        queryset = models.Category.objects.all()
+        serialized_data = CategoryAndChildSerializer(queryset, many=True).data
+
+        # Create a set to store the already displayed category IDs
+        displayed_categories = set()
+
+        # Filter out duplicate categories
+        filtered_data = []
+        for category in serialized_data:
+            if category["id"] not in displayed_categories:
+                filtered_data.append(category)
+                displayed_categories.add(category["id"])
+
+                # Add child categories to the displayed set
+                for child_category in category.get("children", []):
+                    displayed_categories.add(child_category["id"])
+
+        return Response(filtered_data)
 
 
 class BrandViewSet(viewsets.ViewSet):
