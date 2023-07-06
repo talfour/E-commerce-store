@@ -18,7 +18,7 @@ const Order = ({ orders }) => {
       {orders.map((order) => (
         <div
           key={order.id}
-          className="m-auto mb-5 p-5 w-[50vw] bg-white border border-gray-200 rounded-lg shadow"
+          className="m-auto mb-5 p-5 min-w-[100%] lg:w-[50vw] lg:min-w-fit bg-white border border-gray-200 rounded-lg shadow "
         >
           <div className="flex justify-between">
             <span className="italic">Zamówienie #{order.id}</span>
