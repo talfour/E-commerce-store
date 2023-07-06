@@ -21,10 +21,10 @@ const Categories = () => {
   return (
     <section className="text-gray-700 body-font overflow-hidden h-[80vh] mt-20">
       <div className="px-5 py-24 my-auto ">
-        <ul className="text-center flex flex-row justify-center align-middle">
+        <ul className="text-center flex flex-row justify-center align-middle flex-wrap">
           {categories.map((category) => (
             <li
-              className="p-5 mx-5 w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow"
+              className="p-5 mx-5 mb-5 w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow"
               key={category.id}
             >
               <Link

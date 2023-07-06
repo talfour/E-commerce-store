@@ -236,13 +236,44 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
           >
             Kategorie
           </Link>
-          <Link
-            onClick={toggleSidebar}
-            to="/profile"
-            className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
-          >
-            Profil
-          </Link>
+          {isUserLogged ? (
+            <>
+              <Link
+                onClick={toggleSidebar}
+                to="/profile"
+                className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
+              >
+                Profil
+              </Link>
+              <Link
+                onClick={toggleSidebar}
+                to="/orders"
+                className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
+              >
+                Zamówienia
+              </Link>
+              <div
+                onClick={() => {
+                  submitLogout();
+                  toggleSidebar();
+                }}
+                to="/logout"
+                className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
+              >
+                Wyloguj się
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                onClick={toggleSidebar}
+                className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
+              >
+                Zaloguj się
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>
