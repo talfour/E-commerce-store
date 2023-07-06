@@ -52,6 +52,8 @@ class CategoryChildrenView(viewsets.ViewSet):
     Viewset for listing unique categories that are under parent.
     """
 
+    permission_classes = [AllowAny]
+
     def list(self, request):
         queryset = models.Category.objects.all()
         serialized_data = CategoryAndChildSerializer(queryset, many=True).data
