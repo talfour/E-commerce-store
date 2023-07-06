@@ -3,7 +3,7 @@ import { axiosInstance } from "../axios";
 import defaultImage from "../assets/thenounproject.svg";
 import Popup from "./Popup";
 
-const Cart = () => {
+const Cart = ({userEmail, isUserLogged}) => {
   const [shoppingCart, setShoppingCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -11,7 +11,7 @@ const Cart = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
-    email: "",
+    email: isUserLogged ? userEmail : "",
     address: "",
     address2: "",
     post_code: "",
@@ -19,22 +19,22 @@ const Cart = () => {
   });
   const [isSaveAddr, setIsSaveAddr] = useState(false);
   const [isAddressSaved, setIsAddressSaved] = useState(false);
-  const [addresses, setAddresses] = useState([])
+  const [addresses, setAddresses] = useState([]);
   const [showAddresses, setShowAddresses] = useState(false);
 
   useEffect(() => {
     getShoppingCart();
-    checkIfAddressIsSaved();
+    isUserLogged && checkIfAddressIsSaved();
   }, []);
 
   //Check if User saved addresses in the database.
   const checkIfAddressIsSaved = async () => {
     const response = await axiosInstance.get("user/address/");
     if (response.data.length > 0) {
-      setIsAddressSaved(true)
-      setAddresses(response.data)
+      setIsAddressSaved(true);
+      setAddresses(response.data);
     }
-  }
+  };
 
   // Retrieve shopping cart.
   const getShoppingCart = async () => {
@@ -43,7 +43,6 @@ const Cart = () => {
       setShoppingCart(response.data.cart_items);
       setTotalPrice(response.data.total_price);
     }
-
   };
 
   // Get updated price.
@@ -108,17 +107,17 @@ const Cart = () => {
 
   const toggleConfirmationPopup = () => {
     setIsConfirmationPopupOpen(!isConfirmationPopupOpen);
-    setShoppingCart([])
+    setShoppingCart([]);
   };
 
   const handleOrderCreate = async (e) => {
     e.preventDefault();
     const response = await axiosInstance.post("order/", {
-      ...formData
-    })
+      ...formData,
+    });
     if (isSaveAddr === true) {
       await axiosInstance.post("user/address/", {
-        ...formData
+        ...formData,
       });
     }
     if (response.status === 201) {
@@ -128,8 +127,11 @@ const Cart = () => {
   };
 
   const handleAddressChange = (e) => {
-    setFormData((prevData) => ({...prevData, [e.target.name]: e.target.value}))
-  }
+    setFormData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleAddressSelection = (address) => {
     setFormData((prevData) => ({
@@ -139,11 +141,10 @@ const Cart = () => {
       address: address.address,
       address2: address.address2 || "",
       post_code: address.post_code,
-      city: address.city
-    }))
+      city: address.city,
+    }));
     setShowAddresses(false);
-  }
-
+  };
 
   return (
     <div>
@@ -311,26 +312,28 @@ const Cart = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-wrap -mx-3 md:mb-6">
-                  <div className="w-full px-3 mb-2 ">
-                    <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-email"
-                    >
-                      Email
-                    </label>
-                    <input
-                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="grid-email"
-                      type="email"
-                      placeholder="email@email.com"
-                      value={formData.email}
-                      required
-                      name="email"
-                      onChange={(e) => handleAddressChange(e)}
-                    />
+                {!isUserLogged && (
+                  <div className="flex flex-wrap -mx-3 md:mb-6">
+                    <div className="w-full px-3 mb-2 ">
+                      <label
+                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        htmlFor="grid-email"
+                      >
+                        Email
+                      </label>
+                      <input
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="grid-email"
+                        type="email"
+                        placeholder="email@email.com"
+                        value={formData.email}
+                        required
+                        name="email"
+                        onChange={(e) => handleAddressChange(e)}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className="flex flex-wrap -mx-3 md:mb-6">
                   <div className="w-full md:w-1/2 px-3 mb-2">
                     <label
@@ -402,23 +405,25 @@ const Cart = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-wrap -mx-3 mb-3">
-                  <div className="w-full px-3 mb-6">
-                    <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-zip"
-                    >
-                      Zapisać adres?
-                    </label>
-                    <input
-                      className="appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="grid-zip"
-                      type="checkbox"
-                      value={isSaveAddr}
-                      onChange={() => setIsSaveAddr(!isSaveAddr)}
-                    />
+                {isUserLogged && (
+                  <div className="flex flex-wrap -mx-3 mb-3">
+                    <div className="w-full px-3 mb-6">
+                      <label
+                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        htmlFor="grid-zip"
+                      >
+                        Zapisać adres?
+                      </label>
+                      <input
+                        className="appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="grid-zip"
+                        type="checkbox"
+                        value={isSaveAddr}
+                        onChange={() => setIsSaveAddr(!isSaveAddr)}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className="md:flex items-center justify-center mb-5">
                   <div className="">
                     <button

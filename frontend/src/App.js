@@ -15,13 +15,16 @@ import ResetPassword from "./Pages/Authentication/ResetPassword";
 import { axiosInstance } from "./axios";
 import Orders from "./Components/Orders";
 export default function App() {
+
   const [isUserLogged, setIsUserLogged] = useState(false);
+  const [userEmail, setUserEmail] = useState('')
 
   // Check if user is logged in
   const isLogged = async () => {
     try {
       const response = await axiosInstance.get("user/me/");
       if (response.status === 200) {
+        setUserEmail(response.data.email)
         setIsUserLogged(true);
       }
     } catch (error) {
@@ -39,7 +42,10 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/category" element={<Categories />} />
         <Route path="/category/:categoryId" element={<CategoryDetail />} />
-        <Route path="/shopping-cart" element={<Cart />} />
+        <Route
+          path="/shopping-cart"
+          element={<Cart userEmail={userEmail} isUserLogged={isUserLogged} />}
+        />
         <Route path="/profile" element={<Profile />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="orders" element={<Orders />} />
@@ -60,8 +66,7 @@ export default function App() {
           path="/register-confirm"
           element={<RegisterConfirm isUserLogged={isUserLogged} />}
         />
-        <Route
-          path="/profile/reset-password/" element={<ResetPassword />} />
+        <Route path="/profile/reset-password/" element={<ResetPassword />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
