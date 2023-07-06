@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../axios";
 import defaultImage from "../assets/thenounproject.svg";
+import { Link } from "react-router-dom";
 import Popup from "./Popup";
 
 const Cart = ({userEmail, isUserLogged}) => {
@@ -405,7 +406,7 @@ const Cart = ({userEmail, isUserLogged}) => {
                     />
                   </div>
                 </div>
-                {isUserLogged && (
+                {isUserLogged ? (
                   <div className="flex flex-wrap -mx-3 mb-3">
                     <div className="w-full px-3 mb-6">
                       <label
@@ -423,7 +424,7 @@ const Cart = ({userEmail, isUserLogged}) => {
                       />
                     </div>
                   </div>
-                )}
+                ): <h3 className="text-center italic mb-5">Niezalogowani użytkownicy nie są w stanie śledzić swoich zamówień na platformie. <Link className="text-blue-500" to="/login">Zaloguj się</Link></h3>}
                 <div className="md:flex items-center justify-center mb-5">
                   <div className="">
                     <button
