@@ -151,7 +151,7 @@ class ReviewViewSet(viewsets.ViewSet):
 
             if not is_product_in_paid_order:
                 return Response(
-                    {"detail": "Product must be in a paid in order to leave a review."},
+                    {"detail": "Order must be paid to leave a review."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
