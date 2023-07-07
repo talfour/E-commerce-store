@@ -26,6 +26,13 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImagesInline]
 
 
+@admin.register(models.Review)
+class ReviewAdmin(admin.ModelAdmin):
+    model = models.Review
+    list_display = ["product", "rating", "user"]
+    list_filter = ["product"]
+
+
 class OrderItemInline(admin.TabularInline):
     model = models.OrderItem
     raw_id_fields = ["product"]
@@ -68,7 +75,9 @@ class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users."""
 
     ordering = ["id"]
-    list_display = ["email",]
+    list_display = [
+        "email",
+    ]
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (
