@@ -1,20 +1,33 @@
-import React from "react";
-import defaultImage from "../assets/thenounproject.svg"
-import x_mark from "../assets/x_mark.svg"
+import React, { useState } from "react";
+import defaultImage from "../assets/thenounproject.svg";
+import x_mark from "../assets/x_mark.svg";
 import check_mark from "../assets/check_mark.svg";
 import { Link } from "react-router-dom";
+import Popup from "./Popup"
+import ReviewForm from "./ReviewForm";
 
 const Order = ({ orders }) => {
-    const formatDate = (dateString) => {
-        const options = {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        };
-        return new Date(dateString).toLocaleDateString(undefined, options)
-    }
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const openReviewForm = (productId) => {
+    setSelectedProduct(productId);
+  };
+
+  const closeReviewForm = () => {
+    setSelectedProduct(null);
+  };
+
   return (
-    <div className="flex flex-col p-5 justify-center align-middle ">
+    <div className="flex flex-col p-5 justify-center align-middle text-sm lg:text-base">
       {orders.map((order) => (
         <div
           key={order.id}
@@ -49,27 +62,51 @@ const Order = ({ orders }) => {
             </div>
           </div>
           {order.items.map((item) => (
-            <div key={item.id} className="flex items-center mb-5">
-              <img
-                alt={item.product.name}
-                className="w-20"
-                src={
-                  item.product?.images[0]?.image
-                    ? item.product?.images[0]?.image
-                    : defaultImage
-                }
-              />
-              <div className="pl-5">
-                <Link
-                  className="text-blue-500 hover:text-blue-700"
-                  to={`/product/${item.product.id}`}
-                >
-                  {item.product.name}
-                </Link>
-                <p>Cena: {item.price}zł</p>
-                <p>Ilość: {item.quantity}</p>
-                <p>Łącznie: {(item.price * item.quantity).toFixed(2)}zł</p>{" "}
+            <div
+              key={item.id}
+              className="flex flex-wrap mb-5 justify-between text-sm lg:text-base items-end"
+            >
+              <Link
+                className="text-blue-500 hover:text-blue-700 flex-[0_0_100%] text-lg mb-2"
+                to={`/product/${item.product.id}`}
+              >
+                {item.product.name}
+              </Link>
+              <div class="flex">
+                <img
+                  alt={item.product.name}
+                  className="w-16 h-16 object-cover"
+                  src={
+                    item.product?.images[0]?.image
+                      ? item.product?.images[0]?.image
+                      : defaultImage
+                  }
+                />
+                <div className="pl-1 lg:pl-5 max-w-[115px] lg:max-w-none">
+                  <p>Ilość: {item.quantity}</p>
+                  <p>Łącznie: {(item.price * item.quantity).toFixed(2)}zł</p>
+                </div>
               </div>
+              {order.paid && (
+                <div>
+                  {selectedProduct === item.id ? (
+                    ""
+                  ) : (
+                    <button
+                      onClick={() => openReviewForm(item.id)}
+                      className="shadow bg-pink-400 hover:bg-pink-500 focus:shadow-outline focus:outline-none text-white text-sm font-bold py-2 px-2 rounded w-full lg:w-auto"
+                    >
+                      Oceń produkt
+                    </button>
+                  )}
+                </div>
+              )}
+              {selectedProduct === item.id && (
+                <Popup
+                  handleClose={closeReviewForm}
+                  content={<ReviewForm product_id={item.product.id} product_name={item.product.name} />}
+                />
+              )}
             </div>
           ))}
           <p>Całkowity koszt: {order.total_cost}zł</p>
