@@ -58,6 +58,8 @@ class Product(models.Model):
         related_name="products",
     )
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    rating = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    num_reviews = models.IntegerField(null=True, blank=True, default=0)
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -115,7 +117,7 @@ class Order(models.Model):
     def get_total_cost(self):
         total_cost = self.items.aggregate(total_cost=Sum("cost"))["total_cost"]
         if total_cost != 0:
-            total_cost = '{:0.2f}'.format(total_cost)
+            total_cost = "{:0.2f}".format(total_cost)
         return total_cost or Decimal(0)
 
 
@@ -202,3 +204,16 @@ class UserAddress(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+
+class Review(models.Model):
+    """Model representing product review."""
+
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    rating = models.IntegerField(null=True, blank=True, default=0)
+    comment = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.rating)

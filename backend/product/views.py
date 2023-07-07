@@ -2,8 +2,8 @@ from core import models
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
-from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework import status, viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from .serializers import (
@@ -11,6 +11,7 @@ from .serializers import (
     CategoryAndChildSerializer,
     CategorySerializer,
     ProductSerializer,
+    ReviewSerializer,
 )
 
 
@@ -115,3 +116,68 @@ class ProductViewSet(viewsets.ViewSet):
         product = get_object_or_404(models.Product, pk=pk)
         serializer = ProductSerializer(product, context={"request": request})
         return Response(serializer.data)
+
+
+class ReviewViewSet(viewsets.ViewSet):
+    """
+    View for creating product ratings.
+    """
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def create(self, request):
+        """Endpoint create new review for product."""
+        user = request.user
+        serializer = ReviewSerializer(data=request.data)
+
+        if serializer.is_valid():
+            product_id = serializer.validated_data.get("product_id")
+            rating_value = serializer.validated_data.get("rating")
+            comment = serializer.validated_data.get("comment")
+            product = models.Product.objects.get(id=product_id)
+            already_exists = (
+                models.Product.objects.prefetch_related("review_set")
+                .filter(review__user=user, id=product.id)
+                .exists()
+            )
+            if already_exists:
+                return Response(
+                    {"detail": "Product already reviewed"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            is_product_in_paid_order = models.Order.objects.filter(
+                items__product=product, paid=True
+            ).exists()
+
+            if not is_product_in_paid_order:
+                return Response(
+                    {"detail": "Order must be paid to leave a review."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if rating_value == 0:
+                return Response(
+                    {"detail": "Please select a rating."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Create Review.
+            review = models.Review.objects.create(
+                user=user, product=product, rating=rating_value, comment=comment
+            )
+            reviews = product.review_set.all()
+            product.num_reviews = len(reviews)
+            total = 0
+            for i in reviews:
+                total += i.rating
+
+            # Update rating
+            product.rating = total / len(reviews)
+            product.save()
+
+            return Response(
+                {"success": "Rating created successfully."},
+                status=status.HTTP_201_CREATED,
+            )
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

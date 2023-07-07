@@ -16,6 +16,7 @@ router.register(r"brand", views.BrandViewSet, basename="brand")
 router.register(r"product", views.ProductViewSet, basename="product")
 router.register(r"cart", c_views.CartView, basename="cart")
 router.register(r"order", c_views.OrderView, basename="order")
+router.register(r"product_review", views.ReviewViewSet, basename="review")
 
 urlpatterns = [
     path("admin/", admin.site.urls),

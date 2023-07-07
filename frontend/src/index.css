@@ -112,6 +112,20 @@ ul.tree-list li::before{
   background-color: #e1e1e1;
 }
 
+button.rating {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.on {
+  color: #afa019;
+}
+.off {
+  color: #ccc;
+}
+
+
 @media (max-width: 768px) {
   .btn-close {
     right: calc(7% - 28px);

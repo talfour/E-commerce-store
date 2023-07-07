@@ -14,6 +14,7 @@ import RegisterConfirm from "./Pages/Authentication/RegisterConfirm";
 import ResetPassword from "./Pages/Authentication/ResetPassword";
 import { axiosInstance } from "./axios";
 import Orders from "./Components/Orders";
+import TopNav from "./Components/TopNav";
 export default function App() {
 
   const [isUserLogged, setIsUserLogged] = useState(false);
@@ -37,6 +38,7 @@ export default function App() {
   }, []);
   return (
     <div className="App font-roboto bg-gray-100 h-[100vh]">
+      <TopNav />
       <Navbar isUserLogged={isUserLogged} setIsUserLogged={setIsUserLogged} />
       <Routes>
         <Route path="/" element={<Home />} />

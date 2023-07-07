@@ -23,9 +23,19 @@ class ProductImagesSerializer(serializers.ModelSerializer):
         ]
 
 
+class ReviewSerializer(serializers.ModelSerializer):
+    """Serializer for Review model."""
+    product_id = serializers.IntegerField()
+
+    class Meta:
+        model = models.Review
+        fields = ["comment", "rating", "product_id"]
+
+
 class ProductSerializer(serializers.ModelSerializer):
     """Serializer for Product model."""
 
+    reviews = serializers.SerializerMethodField(read_only=True)
     images = ProductImagesSerializer(many=True)
     brand = BrandSerializer()
 
@@ -42,7 +52,13 @@ class ProductSerializer(serializers.ModelSerializer):
             "created",
             "updated",
             "images",
+            "reviews",
         ]
+
+    def get_reviews(self, obj):
+        reviews = obj.review_set.all()
+        serializer = ReviewSerializer(reviews, many=True)
+        return serializer.data
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -57,6 +73,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class CategoryAndChildSerializer(serializers.ModelSerializer):
     """Serializer for Category model that is listing child categories."""
+
     children = serializers.SerializerMethodField()
 
     class Meta:
