@@ -236,9 +236,7 @@ class PrivateReviewAPITests(TestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.data, {"detail": "Product already reviewed"}
-        )
+        self.assertEqual(response.data, {"detail": "Product already reviewed"})
 
     def test_create_review_not_in_paid_order(self):
         """Test that user is unable to review product if order was not paid."""

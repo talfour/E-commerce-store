@@ -72,7 +72,7 @@ const Order = ({ orders }) => {
               >
                 {item.product.name}
               </Link>
-              <div class="flex">
+              <div className="flex">
                 <img
                   alt={item.product.name}
                   className="w-16 h-16 object-cover"

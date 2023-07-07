@@ -162,7 +162,7 @@ class ReviewViewSet(viewsets.ViewSet):
                 )
 
             # Create Review.
-            review = models.Review.objects.create(
+            models.Review.objects.create(
                 user=user, product=product, rating=rating_value, comment=comment
             )
             reviews = product.review_set.all()
