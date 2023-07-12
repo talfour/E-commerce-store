@@ -2,7 +2,8 @@ from core import models
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
-from rest_framework import status, viewsets
+from product.pagination import CustomLimitOffsetPagination
+from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
@@ -90,12 +91,13 @@ class BrandViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class ProductViewSet(viewsets.ViewSet):
+class ProductViewSet(viewsets.ViewSet, generics.ListAPIView):
     """
     Simple Viewset for viewing all products.
     """
 
     permission_classes = [AllowAny]
+    pagination_class = CustomLimitOffsetPagination
 
     @extend_schema(responses=ProductSerializer)
     def list(self, request):
@@ -106,10 +108,10 @@ class ProductViewSet(viewsets.ViewSet):
             queryset = queryset.filter(
                 Q(name__icontains=search_query) | Q(description__icontains=search_query)
             )
-        serializer = ProductSerializer(
-            queryset, many=True, context={"request": request}
-        )
-        return Response(serializer.data)
+
+        page = self.paginate_queryset(queryset)
+        serializer = ProductSerializer(page, many=True, context={"request": request})
+        return self.get_paginated_response(serializer.data)
 
     @extend_schema(responses=ProductSerializer)
     def retrieve(self, request, pk=None):
@@ -162,7 +164,7 @@ class ReviewViewSet(viewsets.ViewSet):
                 )
 
             # Create Review.
-            review = models.Review.objects.create(
+            models.Review.objects.create(
                 user=user, product=product, rating=rating_value, comment=comment
             )
             reviews = product.review_set.all()
