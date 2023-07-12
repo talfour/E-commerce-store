@@ -53,6 +53,8 @@ class ProductSerializer(serializers.ModelSerializer):
             "updated",
             "images",
             "reviews",
+            "rating",
+            "num_reviews"
         ]
 
     def get_reviews(self, obj):
