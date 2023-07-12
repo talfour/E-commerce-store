@@ -15,7 +15,6 @@ const ProductsList = () => {
       setProducts(response.data.results);
       setNextPageUrl(response.data.next);
       setPreviousPageUrl(response.data.previous);
-      console.log(response)
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +43,6 @@ const goToNextPage = async () => {
     setProducts(response.data.results);
     setNextPageUrl(response.data.next);
     setPreviousPageUrl(response.data.previous)
-    console.log(response.data);
   } catch (error) {
     console.log(error);
   }
@@ -57,7 +55,6 @@ const goToNextPage = async () => {
     setProducts(response.data.results);
     setNextPageUrl(response.data.next);
     setPreviousPageUrl(response.data.previous);
-      console.log(response.data);
 
   } catch (error) {
     console.log(error);

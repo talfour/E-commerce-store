@@ -4,18 +4,29 @@ import StarRating from "./StarRating"
 const ReviewForm = ({product_id, product_name}) => {
 
     const [comment, setComment] = useState('')
-    const [rating, setRating] = useState('')
+  const [rating, setRating] = useState('')
+  const [message, setMessage] = useState('')
+  const [messageError, setMessageError] = useState(false)
 
     const handleReviewCreate = async (e) => {
-        e.preventDefault()
-        console.log(product_id);
-        const response = await axiosInstance.post("/product_review/", {
-          product_id: product_id,
-          rating: rating,
-          comment: comment,
-        });
-        console.log(response);
-    }
+      e.preventDefault()
+      try {
+        const response = await axiosInstance
+          .post("/product_review/", {
+            product_id: product_id,
+            rating: rating,
+            comment: comment,
+          })
+        if (response.status === 201) {
+          setMessage('Your review was added successfully.')
+
+      }
+      } catch (error) {
+        setMessageError(true);
+        setMessage(error.response.data.detail);
+      }
+        }
+
 
   return (
     <div>
@@ -48,7 +59,6 @@ const ReviewForm = ({product_id, product_name}) => {
             </label>
             <StarRating setRating={setRating} rating={rating} />
           </div>
-
           <div className="w-full px-3 mb-2">
             <button
               className="shadow bg-pink-400 hover:bg-pink-500 focus:shadow-outline focus:outline-none text-white text-sm font-bold py-2 px-2 rounded w-full"
@@ -59,6 +69,7 @@ const ReviewForm = ({product_id, product_name}) => {
           </div>
         </div>
       </form>
+      <h1 className={`text-center ${messageError ? 'text-red-400': 'text-green-400'}`}>{message}</h1>
     </div>
   );
 }

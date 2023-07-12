@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import defaultImage from "../../assets/thenounproject.svg";
 import { axiosInstance } from "../../axios";
+import Stars from "../../Components/Stars";
 
 const Product = ({ product }) => {
+
+  const maxRating = 5;
+  const rating = product.rating
   const productImage = product.images[0]?.image
     ? product.images[0]?.image
     : defaultImage;
@@ -17,6 +21,7 @@ const Product = ({ product }) => {
       console.log(error);
     }
   };
+
   return product.available ? (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow">
       <Link to={`/product/${product.id}`}>
@@ -26,6 +31,12 @@ const Product = ({ product }) => {
           alt={product.name}
         />
       </Link>
+      <Stars
+        rating={product.rating}
+        num_reviews={product.num_reviews}
+        isList={true}
+        showNumReviews={true}
+      />
       <div className="px-5 pb-5">
         <Link to={`/product/${product.id}`}>
           <h5 className="text-xl font-semibold tracking-tight text-gray-900 ">

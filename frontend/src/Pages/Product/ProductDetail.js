@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { axiosInstance } from "../../axios";
+import Stars from "../../Components/Stars";
 
 import defaultImage from "../../assets/thenounproject.svg";
 
@@ -13,6 +14,7 @@ const ProductDetail = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const location = useLocation();
   const url = location.pathname;
+  const maxRating = 5;
 
   const handleAddToCart = async (productID) => {
     try {
@@ -115,10 +117,14 @@ const ProductDetail = () => {
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
                 {product.name}
               </h1>
+              <Stars
+                rating={product.rating}
+                num_reviews={product.num_reviews}
+                showNumReviews={true}
+              />
               <div className="leading-relaxed whitespace-pre-line w-100 overflow-x-auto">
                 {product.description}
               </div>
-
 
               <div className="flex justify-between align-middle mt-5">
                 <span className="title-font font-medium text-2xl text-gray-900">
@@ -170,6 +176,19 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
+        {product.reviews.length > 0 && (
+          <>
+            <h1 className="text-center text-3xl mb-5">Reviews</h1>
+            <div className="flex justify-center px-5">
+              {product.reviews.map((review) => (
+                <div key={review.comment} className="flex flex-col items-start">
+                  <Stars rating={review.rating} />
+                  <p className=" max-w-3xl mb-5">{review.comment}</p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </section>
     )
   );
