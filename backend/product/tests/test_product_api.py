@@ -5,7 +5,9 @@ from core.models import Brand, Category, Order, Product, Review
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from product.pagination import CustomLimitOffsetPagination
 from product.serializers import BrandSerializer, CategorySerializer, ProductSerializer
+from product.views import ProductViewSet
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -70,24 +72,25 @@ def detail_category_url(category_id):
 class PublicProductAPITests(TestCase):
     """Test unauthenticated API requests."""
 
+    view = ProductViewSet
+
     def setUp(self):
         self.client = APIClient()
 
     def test_auth_not_required(self):
         """Test auth is not required to call API."""
-        res = self.client.get(PRODUCTS_URL)
+        res = self.client.get(PRODUCTS_URL, {"limit": "50"})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def test_retrive_products(self):
-        create_product()
-        create_product()
+    def test_retrieve_product(self):
+        product = create_product()
+        url = reverse("product-detail", kwargs={"pk": product.id})
+        response = self.client.get(url)
 
-        res = self.client.get(PRODUCTS_URL)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        products = Product.objects.all().order_by("-id")
-        serializer = ProductSerializer(products, many=True)
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, serializer.data)
+        serializer = ProductSerializer(product)
+        self.assertEqual(response.data, serializer.data)
 
     def test_get_product_detail(self):
         """Test get product detail."""
@@ -98,6 +101,36 @@ class PublicProductAPITests(TestCase):
 
         serializer = ProductSerializer(product)
         self.assertEqual(res.data, serializer.data)
+
+    def test_pagination(self):
+        """Test for product pagination."""
+        self.view.pagination_class = CustomLimitOffsetPagination
+        response = self.client.get(PRODUCTS_URL, {"limit": 50})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("results", response.data)
+        self.assertIn("count", response.data)
+        self.assertIn("next", response.data)
+        self.assertIn("previous", response.data)
+
+    def test_search(self):
+        """Test search functionality"""
+        product = create_product(name="Test product")
+        product2 = create_product(name="I am hidden", description="I am hidden")
+        response = self.client.get(PRODUCTS_URL, {"search": "test", "limit": 50})
+        self.assertEqual(response.data["count"], 1)
+        results = response.data["results"]
+        result = results[0]
+        self.assertEqual(result["name"], product.name)
+        self.assertNotEqual(result["name"], product2.name)
+
+    def test_search_pagination(self):
+        """Test search and pagination together"""
+        response = self.client.get(PRODUCTS_URL, {"search": "query", "limit": 50})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("results", response.data)
+        self.assertIn("count", response.data)
+        self.assertIn("next", response.data)
+        self.assertIn("previous", response.data)
 
 
 class PublicCategoryAPITests(TestCase):
