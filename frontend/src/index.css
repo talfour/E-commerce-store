@@ -126,6 +126,19 @@ button.rating {
 }
 
 
+@keyframes slide-up {
+  from {
+  transform: translate(-50%, 100%);
+  }
+  to {
+    transform: translate(-50%, 0%);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-in-out;
+}
+
 @media (max-width: 768px) {
   .btn-close {
     right: calc(7% - 28px);
