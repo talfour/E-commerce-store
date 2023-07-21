@@ -1,4 +1,5 @@
 from cart import views as c_views
+from coupons import views as coupon_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -17,6 +18,7 @@ router.register(r"product", views.ProductViewSet, basename="product")
 router.register(r"cart", c_views.CartView, basename="cart")
 router.register(r"order", c_views.OrderView, basename="order")
 router.register(r"product_review", views.ReviewViewSet, basename="review")
+router.register(r"coupons", coupon_views.CouponViewSet, basename="coupons")
 
 urlpatterns = [
     path("admin/", admin.site.urls),

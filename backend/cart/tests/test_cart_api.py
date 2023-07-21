@@ -52,7 +52,9 @@ class CartViewTests(TestCase):
         self.client.post(reverse("cart-add", args=[self.product2.id]), {"quantity": 2})
 
         response = self.client.get(CART_URL_LIST_DATA)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(
+            len(response.data), 4
+        )  # response contain discount and coupon as well
         self.assertEqual(response.data["cart_items"][0]["name"], self.product1.name)
 
     def test_remove_item_from_cart(self):

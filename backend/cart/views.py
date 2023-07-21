@@ -78,8 +78,20 @@ class CartView(viewsets.ViewSet):
                     "image_url": item["product"].get_image_url(request),
                 }
             )
-        total_price = cart.get_total_price()
-        return Response({"cart_items": cart_items, "total_price": total_price})
+        total_price = cart.get_total_price_after_discount()
+        discount = cart.get_discount()
+        if cart.coupon:
+            coupon = cart.coupon.code
+        else:
+            coupon = ''
+        return Response({"cart_items": cart_items, "total_price": total_price, "discount": discount, "coupon": coupon})
+
+    @action(detail=False, methods=["get"], url_name="get_cart_discount")
+    def get_cart_discount(self, request):
+        """Get the cart discount."""
+        cart = self.get_cart(request)
+        discount = cart.get_discount()
+        return Response({"discount": discount})
 
 
 class OrderView(viewsets.ModelViewSet):
@@ -108,12 +120,16 @@ class OrderView(viewsets.ModelViewSet):
         # Get current user if user is not authenticated let user to create an
         # order anyway but User won't be able to track order in profile menu.
         user = request.user if request.user.is_authenticated else None
-        print(user)
         serializer = OrderSerializer(
             data=request.data, context={"request": request, "user": user}
         )
         if serializer.is_valid():
             order = serializer.save(user=user)
+            if cart.coupon:
+                order.coupon = cart.coupon
+                order.discount = cart.coupon.discount
+                order.save()
+            # Create order items
             for item in cart:
                 OrderItem.objects.create(
                     order=order,
@@ -127,5 +143,6 @@ class OrderView(viewsets.ModelViewSet):
                 countdown=30,
                 args=(order.id,),
             )
+            request.session["coupon_id"] = None
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

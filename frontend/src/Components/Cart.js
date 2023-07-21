@@ -3,6 +3,7 @@ import { axiosInstance } from "../axios";
 import defaultImage from "../assets/thenounproject.svg";
 import { Link } from "react-router-dom";
 import Popup from "./Popup";
+import Notification from "./Notification";
 
 const Cart = ({userEmail, isUserLogged}) => {
   const [shoppingCart, setShoppingCart] = useState([]);
@@ -22,6 +23,11 @@ const Cart = ({userEmail, isUserLogged}) => {
   const [isAddressSaved, setIsAddressSaved] = useState(false);
   const [addresses, setAddresses] = useState([]);
   const [showAddresses, setShowAddresses] = useState(false);
+  const [coupon, setCoupon] = useState('');
+  const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState('');
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     getShoppingCart();
@@ -43,6 +49,10 @@ const Cart = ({userEmail, isUserLogged}) => {
     if (response.status === 200) {
       setShoppingCart(response.data.cart_items);
       setTotalPrice(response.data.total_price);
+      if (response.data.discount !== 0) {
+        setDiscount(response.data.discount)
+        setCouponCode(response.data.coupon)
+      }
     }
   };
 
@@ -122,8 +132,11 @@ const Cart = ({userEmail, isUserLogged}) => {
       });
     }
     if (response.status === 201) {
+      setDiscount('');
       togglePopup();
       toggleConfirmationPopup();
+
+      console.log('remove discount');
     }
   };
 
@@ -146,6 +159,31 @@ const Cart = ({userEmail, isUserLogged}) => {
     }));
     setShowAddresses(false);
   };
+
+const handleCoupon = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axiosInstance.post("coupons/coupon_apply/", {
+      code: coupon,
+    });
+
+    if (response.status === 200) {
+      setIsNotificationVisible(true);
+      setNotification({type: 'success', message: 'Kod rabatowy został zastosowany!'})
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      setIsNotificationVisible(true);
+      setNotification({
+        type: "warning",
+        message: "Nieprawidłowy kod rabatowy.",
+      });
+      setDiscount('');
+    }
+  }
+
+  getShoppingCart();
+};
 
   return (
     <div>
@@ -245,7 +283,13 @@ const Cart = ({userEmail, isUserLogged}) => {
                 <p className="text-gray-700 ">Łącznie</p>
                 <p className="text-gray-700">{totalPrice}zł</p>
               </div>
-              <div className="flex justify-between">
+              {discount !== "" && (
+                <div className="mb-2 flex justify-between">
+                  <p className="text-gray-700">Kod rabatowy: {couponCode}</p>
+                  <p className="text-gray-700">-{discount}zł</p>
+                </div>
+              )}
+              <div className="mb-2 flex justify-between">
                 <p className="text-gray-700">Dostawa</p>
                 <p className="text-gray-700">10zł</p>
               </div>
@@ -258,6 +302,21 @@ const Cart = ({userEmail, isUserLogged}) => {
                   </p>
                   <p className="text-sm text-gray-700">łącznie z VAT</p>
                 </div>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-lg font-bold">Kod rabatowy</p>
+                <input
+                  type="text"
+                  value={coupon}
+                  onChange={(e) => setCoupon(e.target.value)}
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                />
+                <button
+                  onClick={handleCoupon}
+                  className="mt-1 shadow bg-pink-400 hover:bg-pink-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded w-full lg:w-auto"
+                >
+                  Zatwierdź kod
+                </button>
               </div>
               <button
                 onClick={togglePopup}
@@ -424,7 +483,15 @@ const Cart = ({userEmail, isUserLogged}) => {
                       />
                     </div>
                   </div>
-                ): <h3 className="text-center italic mb-5">Niezalogowani użytkownicy nie są w stanie śledzić swoich zamówień na platformie. <Link className="text-blue-500" to="/login">Zaloguj się</Link></h3>}
+                ) : (
+                  <h3 className="text-center italic mb-5">
+                    Niezalogowani użytkownicy nie są w stanie śledzić swoich
+                    zamówień na platformie.{" "}
+                    <Link className="text-blue-500" to="/login">
+                      Zaloguj się
+                    </Link>
+                  </h3>
+                )}
                 <div className="md:flex items-center justify-center mb-5">
                   <div className="">
                     <button
@@ -501,6 +568,14 @@ const Cart = ({userEmail, isUserLogged}) => {
                 ))}
             </>
           }
+        />
+      )}
+      {isNotificationVisible && (
+        <Notification
+          type={notification.type}
+          message={notification.message}
+          duration={5000}
+          onClose={() => setIsNotificationVisible(false)}
         />
       )}
     </div>

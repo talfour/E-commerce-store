@@ -12,6 +12,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.core.mail import send_mail
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Sum
 from django.dispatch import receiver
@@ -107,6 +108,16 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
     user = models.ForeignKey("User", on_delete=models.DO_NOTHING, null=True, blank=True)
+    coupon = models.ForeignKey(
+        "Coupon",
+        related_name="orders",
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+    )
+    discount = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
 
     class Meta:
         ordering = ("-created",)
@@ -117,6 +128,8 @@ class Order(models.Model):
     def get_total_cost(self):
         total_cost = self.items.aggregate(total_cost=Sum("cost"))["total_cost"]
         if total_cost != 0:
+            if self.discount:
+                total_cost -= total_cost * (self.discount / Decimal("100"))
             total_cost = "{:0.2f}".format(total_cost)
         return total_cost or Decimal(0)
 
@@ -217,3 +230,16 @@ class Review(models.Model):
 
     def __str__(self):
         return str(self.rating)
+
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    valid_from = models.DateTimeField()
+    valid_to = models.DateTimeField()
+    discount = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
+    active = models.BooleanField()
+
+    def __str__(self):
+        return self.code
