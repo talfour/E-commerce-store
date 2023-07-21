@@ -23,7 +23,7 @@ prompt-toolkit==3.0.38
 psycopg2-binary==2.9.6
 pyrsistent==0.19.3
 pytz==2023.3
-PyYAML==6.0
+PyYAML==6.0.1
 redis==4.5.5
 six==1.16.0
 sqlparse==0.4.4
