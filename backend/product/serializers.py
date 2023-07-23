@@ -25,6 +25,7 @@ class ProductImagesSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     """Serializer for Review model."""
+
     product_id = serializers.IntegerField()
 
     class Meta:
@@ -54,7 +55,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "images",
             "reviews",
             "rating",
-            "num_reviews"
+            "num_reviews",
         ]
 
     def get_reviews(self, obj):

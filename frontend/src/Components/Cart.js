@@ -123,7 +123,7 @@ const Cart = ({userEmail, isUserLogged}) => {
 
   const handleOrderCreate = async (e) => {
     e.preventDefault();
-    const response = await axiosInstance.post("order/", {
+    const response = await axiosInstance.post("orders/", {
       ...formData,
     });
     if (isSaveAddr === true) {

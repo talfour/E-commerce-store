@@ -152,6 +152,10 @@ STATIC_ROOT = BASE_DIR / "django_static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+REDIS_HOST = 'redis'
+REDIS_PORT = 6379
+REDIS_DB = 2
+
 CELERY_BROKER_URL = "redis://redis:6379/0"
 CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 # Cart Session

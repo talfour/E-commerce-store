@@ -35,7 +35,7 @@ const Product = ({ product }) => {
         showNumReviews={true}
       />
       <div className="px-5 pb-5">
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/products/${product.id}`}>
           <h5 className="text-xl font-semibold tracking-tight text-gray-900 ">
             {product.name}
           </h5>
