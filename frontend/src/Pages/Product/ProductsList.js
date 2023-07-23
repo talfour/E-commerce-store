@@ -11,7 +11,7 @@ const ProductsList = () => {
 
   const getData = async () => {
     try {
-      const response = await axiosInstance.get(`product/?limit=${itemLimit}`);
+      const response = await axiosInstance.get(`products/?limit=${itemLimit}`);
       setProducts(response.data.results);
       setNextPageUrl(response.data.next);
       setPreviousPageUrl(response.data.previous);
@@ -24,7 +24,7 @@ const handleSearch = async () => {
   if (searchQuery.length > 2) {
     try {
       const response = await axiosInstance.get(
-        `product/?limit=${itemLimit}&search=${searchQuery}`
+        `products/?limit=${itemLimit}&search=${searchQuery}`
       );
       if (response.status === 200) {
         setProducts(response.data.results);

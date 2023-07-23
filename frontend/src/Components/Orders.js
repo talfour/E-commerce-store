@@ -7,7 +7,7 @@ const Orders = () => {
 
   const [orders, setOrders] = useState([]);
   const getOrderData = async () => {
-    const response = await axiosInstance.get('order/')
+    const response = await axiosInstance.get('orders/')
     if (response.status === 200) {
       console.log(response.data);
       setOrders(response.data)

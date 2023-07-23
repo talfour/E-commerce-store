@@ -14,7 +14,6 @@ const ProductDetail = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const location = useLocation();
   const url = location.pathname;
-  const maxRating = 5;
 
   const handleAddToCart = async (productID) => {
     try {

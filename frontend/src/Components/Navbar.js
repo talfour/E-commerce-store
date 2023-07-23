@@ -48,7 +48,7 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/category" className="hover:text-gray-200">
+                  <Link to="/categories" className="hover:text-gray-200">
                     Kategorie
                   </Link>
                 </li>
@@ -230,7 +230,7 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
             Strona główna
           </Link>
           <Link
-            to="/category"
+            to="/categories"
             onClick={toggleSidebar}
             className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
           >

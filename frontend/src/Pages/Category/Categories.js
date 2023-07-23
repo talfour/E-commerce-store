@@ -10,7 +10,7 @@ const Categories = () => {
 
   const getData = async () => {
     try {
-      const response = await axiosInstance.get("categorychilds/");
+      const response = await axiosInstance.get("category-children/");
       console.log(response);
       setCategories(response.data);
     } catch (error) {

@@ -9,15 +9,15 @@ from product import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r"category", views.CategoryViewSet, basename="category")
+router.register(r"categories", views.CategoryViewSet, basename="categories")
 router.register(
-    r"categorychilds", views.CategoryChildrenView, basename="categorychilds"
+    r"category-children", views.CategoryChildrenView, basename="category-children"
 )
-router.register(r"brand", views.BrandViewSet, basename="brand")
-router.register(r"product", views.ProductViewSet, basename="product")
+router.register(r"brands", views.BrandViewSet, basename="brands")
+router.register(r"products", views.ProductViewSet, basename="products")
 router.register(r"cart", c_views.CartView, basename="cart")
-router.register(r"order", c_views.OrderView, basename="order")
-router.register(r"product_review", views.ReviewViewSet, basename="review")
+router.register(r"orders", c_views.OrderView, basename="order")
+router.register(r"product_reviews", views.ReviewViewSet, basename="reviews")
 router.register(r"coupons", coupon_views.CouponViewSet, basename="coupons")
 
 urlpatterns = [

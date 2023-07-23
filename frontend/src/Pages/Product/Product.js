@@ -4,9 +4,6 @@ import { axiosInstance } from "../../axios";
 import Stars from "../../Components/Stars";
 
 const Product = ({ product }) => {
-
-  const maxRating = 5;
-  const rating = product.rating
   const productImage = product.images[0]?.image
     ? product.images[0]?.image
     : defaultImage;
@@ -24,7 +21,7 @@ const Product = ({ product }) => {
 
   return product.available ? (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-      <Link to={`/product/${product.id}`}>
+      <Link to={`/products/${product.id}`}>
         <img
           className="p-8 rounded-t-lg object-cover h-48 w-96"
           src={productImage}

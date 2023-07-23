@@ -11,9 +11,10 @@ from product.views import ProductViewSet
 from rest_framework import status
 from rest_framework.test import APIClient
 
-PRODUCTS_URL = reverse("product-list")
-CATEGORIES_URL = reverse("category-list")
-BRANDS_URL = reverse("brand-list")
+PRODUCTS_URL = reverse("products-list")
+CATEGORIES_URL = reverse("categories-list")
+BRANDS_URL = reverse("brands-list")
+REVIEWS_URL = reverse("reviews-list")
 
 
 def create_category(**params):
@@ -52,7 +53,7 @@ def create_product(**params):
 def detail_product_url(product_id):
     """Create and return a product detail URL."""
     return reverse(
-        "product-detail",
+        "products-detail",
         args=[
             product_id,
         ],
@@ -62,7 +63,7 @@ def detail_product_url(product_id):
 def detail_category_url(category_id):
     """Create and return a category detail URL."""
     return reverse(
-        "category-detail",
+        "categories-detail",
         args=[
             category_id,
         ],
@@ -84,7 +85,7 @@ class PublicProductAPITests(TestCase):
 
     def test_retrieve_product(self):
         product = create_product()
-        url = reverse("product-detail", kwargs={"pk": product.id})
+        url = detail_product_url(product.id)
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -217,10 +218,9 @@ class PrivateReviewAPITests(TestCase):
         order = Order.objects.create(user=self.user, paid=True)
         order.items.create(product=product, price=10.0, quantity=1)
 
-        url = reverse("review-list")
         data = {"product_id": product.id, "rating": 4, "comment": "Great product!"}
 
-        response = self.client.post(url, data)
+        response = self.client.post(REVIEWS_URL, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         review = Review.objects.first()
@@ -237,15 +237,14 @@ class PrivateReviewAPITests(TestCase):
         order = Order.objects.create(user=self.user, paid=True)
         order.items.create(product=product, price=10.0, quantity=1)
 
-        url = reverse("review-list")
         data = {"product_id": product.id, "rating": 1, "comment": "Great product!"}
 
-        response = self.client.post(url, data)
+        response = self.client.post(REVIEWS_URL, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         self.client.force_authenticate(user=self.second_user)
         data2 = {"product_id": product.id, "rating": 5, "comment": "Not working"}
-        res = self.client.post(url, data2)
+        res = self.client.post(REVIEWS_URL, data2)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         product.refresh_from_db()
@@ -264,25 +263,22 @@ class PrivateReviewAPITests(TestCase):
             user=self.user, product=product, rating=4, comment="Good stuff"
         )
 
-        url = reverse("review-list")
         data = {"product_id": product.id, "rating": 5, "comment": "Amazing product"}
 
-        response = self.client.post(url, data)
+        response = self.client.post(REVIEWS_URL, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data, {"detail": "Product already reviewed"})
 
     def test_create_review_not_in_paid_order(self):
         """Test that user is unable to review product if order was not paid."""
         product = create_product()
-
-        url = reverse("review-list")
         data = {
             "product_id": product.id,
             "rating": 5,
             "comment": "Amazing product!",
         }
 
-        response = self.client.post(url, data)
+        response = self.client.post(REVIEWS_URL, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
@@ -295,14 +291,13 @@ class PrivateReviewAPITests(TestCase):
         order = Order.objects.create(user=self.user, paid=True)
         order.items.create(product=product, price=10.0, quantity=1)
 
-        url = reverse("review-list")
         data = {
             "product_id": product.id,
             "rating": 0,
             "comment": "Invalid rating",
         }
 
-        response = self.client.post(url, data)
+        response = self.client.post(REVIEWS_URL, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,

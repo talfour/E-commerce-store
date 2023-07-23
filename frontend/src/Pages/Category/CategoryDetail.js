@@ -16,6 +16,7 @@ const CategoryDetail = () => {
     const getCategory = async () => {
       try {
         const response = await axiosInstance.get(`${url}/`);
+        console.log(url);
         console.log(response.data);
         if (response.status === 200) {
           setCategoryName(response.data.name);

@@ -42,14 +42,14 @@ export default function App() {
       <Navbar isUserLogged={isUserLogged} setIsUserLogged={setIsUserLogged} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/category" element={<Categories />} />
-        <Route path="/category/:categoryId" element={<CategoryDetail />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/categories/:categoryId" element={<CategoryDetail />} />
         <Route
           path="/shopping-cart"
           element={<Cart userEmail={userEmail} isUserLogged={isUserLogged} />}
         />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/product/:productId" element={<ProductDetail />} />
+        <Route path="/products/:productId" element={<ProductDetail />} />
         <Route path="orders" element={<Orders />} />
         <Route
           path="/login"
