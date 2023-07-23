@@ -7,6 +7,7 @@ from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
+from .recommender import Recommender
 from .serializers import (
     BrandSerializer,
     CategoryAndChildSerializer,
@@ -117,7 +118,28 @@ class ProductViewSet(viewsets.ViewSet, generics.ListAPIView):
     def retrieve(self, request, pk=None):
         product = get_object_or_404(models.Product, pk=pk)
         serializer = ProductSerializer(product, context={"request": request})
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class RecommendedProductViewSet(viewsets.ViewSet):
+    """
+    View for getting recommended products.
+    """
+
+    permission_classes = [
+        AllowAny,
+    ]
+
+    @extend_schema(responses=ProductSerializer)
+    def retrieve(self, request, pk=None):
+        product = get_object_or_404(models.Product, pk=pk)
+        r = Recommender()
+        serializer = ProductSerializer(
+            r.suggest_products_for([product], 4),
+            many=True,
+            context={"request": request},
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ReviewViewSet(viewsets.ViewSet):
@@ -163,7 +185,7 @@ class ReviewViewSet(viewsets.ViewSet):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Create Review.
+            # Create Review
             models.Review.objects.create(
                 user=user, product=product, rating=rating_value, comment=comment
             )

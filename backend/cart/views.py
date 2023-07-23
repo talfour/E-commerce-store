@@ -1,5 +1,6 @@
 from core.models import Order, OrderItem, Product
 from core.tasks import order_created
+from product.recommender import Recommender
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -83,8 +84,15 @@ class CartView(viewsets.ViewSet):
         if cart.coupon:
             coupon = cart.coupon.code
         else:
-            coupon = ''
-        return Response({"cart_items": cart_items, "total_price": total_price, "discount": discount, "coupon": coupon})
+            coupon = ""
+        return Response(
+            {
+                "cart_items": cart_items,
+                "total_price": total_price,
+                "discount": discount,
+                "coupon": coupon,
+            }
+        )
 
     @action(detail=False, methods=["get"], url_name="get_cart_discount")
     def get_cart_discount(self, request):
@@ -137,6 +145,11 @@ class OrderView(viewsets.ModelViewSet):
                     price=item["price"],
                     quantity=item["quantity"],
                 )
+
+            # Create a new recommendation
+            products_bought = [item["product"] for item in cart]
+            r = Recommender()
+            r.products_bought(products_bought)
             # Clear the shopping cart
             cart.clear()
             order_created.apply_async(

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { axiosInstance } from "../../axios";
 import Stars from "../../Components/Stars";
+import Product from "./Product";
 
 import defaultImage from "../../assets/thenounproject.svg";
 
@@ -12,8 +13,22 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [recommendation, setRecommendation] = useState([])
   const location = useLocation();
   const url = location.pathname;
+
+  const getRecommendedProducts = async (productID) => {
+    try {
+      const response = await axiosInstance.get(
+        `recommended-products/${productID}/`
+      );
+      if (response.status === 200 & response.data.length > 0) {
+        setRecommendation(response.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleAddToCart = async (productID) => {
     try {
@@ -48,10 +63,11 @@ const ProductDetail = () => {
           } else {
             setImages([{ id: 0, image: defaultImage }]);
           }
-          setIsLoaded(true);
         }
+        getRecommendedProducts(response.data.id);
+        setIsLoaded(true);
       } catch (error) {
-        console.log(error.response.data);
+        console.log(error);
         setIsNotFound(true);
         setIsLoaded(true);
       }
@@ -187,6 +203,18 @@ const ProductDetail = () => {
               ))}
             </div>
           </>
+        )}
+        {recommendation.length > 0 && (
+          <div>
+            <h1 className="text-center text-3xl my-5">
+              Inni kupowali również:
+            </h1>
+            <div className="flex items-center p-4 gap-4 flex-wrap align-middle justify-center">
+              {recommendation.map((product) => (
+                <Product key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
         )}
       </section>
     )

@@ -18,6 +18,7 @@ router.register(r"products", views.ProductViewSet, basename="products")
 router.register(r"cart", c_views.CartView, basename="cart")
 router.register(r"orders", c_views.OrderView, basename="order")
 router.register(r"product_reviews", views.ReviewViewSet, basename="reviews")
+router.register(r'recommended-products', views.RecommendedProductViewSet, basename='recommended-products')
 router.register(r"coupons", coupon_views.CouponViewSet, basename="coupons")
 
 urlpatterns = [

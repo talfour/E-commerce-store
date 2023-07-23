@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from product.pagination import CustomLimitOffsetPagination
+from product.recommender import Recommender
 from product.serializers import BrandSerializer, CategorySerializer, ProductSerializer
 from product.views import ProductViewSet
 from rest_framework import status
@@ -132,6 +133,29 @@ class PublicProductAPITests(TestCase):
         self.assertIn("count", response.data)
         self.assertIn("next", response.data)
         self.assertIn("previous", response.data)
+
+
+class RecommendedProductTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.product = create_product()
+        self.recommender = Recommender()
+
+    def test_get_recommended_products(self):
+        """Test to verify if the API endpoint returns recommended products based on the products purchased."""
+        product = create_product()
+        self.recommender.products_bought([self.product, product])
+        url = reverse("recommended-products-detail", args=[self.product.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["id"], product.id)
+
+    def test_get_recommended_products_with_invalid_product_id(self):
+        """Test to verify if the API endpoint handles the case of an invalid product ID."""
+        url = reverse("recommended-products-detail", args=["123"])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class PublicCategoryAPITests(TestCase):
