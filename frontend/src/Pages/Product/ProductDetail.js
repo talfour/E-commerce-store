@@ -74,7 +74,7 @@ const ProductDetail = () => {
     };
     getProduct();
     // eslint-disable-next-line
-  }, []);
+  }, [url]);
 
   return isNotFound ? (
     <h1 className="align-middle text-center text-5xl pt-10 pb-10 font-roboto font-bold">
