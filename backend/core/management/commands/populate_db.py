@@ -1,5 +1,5 @@
 from core.factories import BrandFactory, CategoryFactory, ProductFactory
-from core.models import Brand, Category, Product
+from core.models import Category
 from django.core.management.base import BaseCommand
 
 nested_categories_electronics = [
