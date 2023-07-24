@@ -67,3 +67,11 @@ To test run following command:
 ```bash
 docker-compose run --rm backend sh -c "python manage.py test && flake8"
 ```
+
+## To create a dummy data
+
+To create a dummy data run following command:
+
+```bash
+docker-compose run --rm backend sh -c "python manage.py populate_db"
+```
