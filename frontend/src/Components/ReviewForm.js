@@ -30,7 +30,7 @@ const ReviewForm = ({product_id, product_name}) => {
 
   return (
     <div>
-      <h1 className="text-lg mb-5">Oceń produkt: {product_name}</h1>
+      <h1 className="text-lg mb-5">Rate the product: {product_name}</h1>
       <form className="w-full h-auto" onSubmit={handleReviewCreate}>
         <div className="flex flex-wrap -mx-3 justify-center align-middle md:mb-6">
           <div className="w-full px-3 mb-2">
@@ -38,7 +38,7 @@ const ReviewForm = ({product_id, product_name}) => {
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="comment"
             >
-              Komentarz
+              Comment
             </label>
             <textarea
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
@@ -55,7 +55,7 @@ const ReviewForm = ({product_id, product_name}) => {
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="stars"
             >
-              Ocena
+              Rate
             </label>
             <StarRating setRating={setRating} rating={rating} />
           </div>
@@ -64,7 +64,7 @@ const ReviewForm = ({product_id, product_name}) => {
               className="shadow bg-pink-400 hover:bg-pink-500 focus:shadow-outline focus:outline-none text-white text-sm font-bold py-2 px-2 rounded w-full"
               type="submit"
             >
-              Oceń
+              Rate the product
             </button>
           </div>
         </div>

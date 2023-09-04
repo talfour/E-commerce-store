@@ -8,11 +8,11 @@ const TopNav = () => {
     <div className="flex flex-wrap bg-gray-900 text-white justify-center lg:justify-end items-center italic">
       <div className="flex py-1 px-5">
         <EmailIcon />
-        <span className='leading-[23px]'>contact@vapemate.pl</span>
+        <span className='leading-[23px]'>contact@yourshop.com</span>
       </div>
       <div className="flex py-1 px-5">
         <MobileIcon />
-        <span className='leading-[25px]'>+48 000 000 000</span>
+        <span className='leading-[25px]'>+00 000 000 000</span>
       </div>
     </div>
   );

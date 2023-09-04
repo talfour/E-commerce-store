@@ -58,7 +58,7 @@ const ResetPassword = () => {
               alt="Your Company"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Zresetuj swoje hasło
+              Reset your password
             </h2>
           </div>
 
@@ -74,7 +74,7 @@ const ResetPassword = () => {
                     htmlFor="password"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Nowe hasło
+                    New password
                   </label>
                 </div>
                 <div className="mt-2">
@@ -92,7 +92,7 @@ const ResetPassword = () => {
                   />
                   {isError && (
                     <p className="text-red-500 text-center text-s mt-4">
-                      Hasło jest zbyt krótkie lub nastąpił nieoczekiwany błąd.
+                      Password is too short
                     </p>
                   )}
                 </div>
@@ -103,7 +103,7 @@ const ResetPassword = () => {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Zresetuj hasło
+                  Reset Password
                 </button>
               </div>
             </form>
@@ -119,8 +119,7 @@ const ResetPassword = () => {
               alt="Your Company"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Token wygasł lub jest niepoprawny. Spróbuj ponownie zresetować
-              hasło.
+              Token has expired. Please try again.
             </h2>
           </div>
         </div>
@@ -134,16 +133,16 @@ const ResetPassword = () => {
               alt="Your Company"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Hasło zostało zmienione.
+              Password was changed.
             </h2>
             <p className="mt-10 text-center text-sm text-gray-500">
-              Możesz się teraz
+              You can now login using new password
               <Link
                 to="/login"
                 className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
               >
                 {" "}
-                zalogować
+                Log in
               </Link>
             </p>
           </div>

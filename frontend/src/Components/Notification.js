@@ -25,7 +25,7 @@ const Notification = ({ type, message, duration = 5000, onClose }) => {
         >
           {message}
           <button className="ml-2 text-black font-bold" onClick={handleDismiss}>
-            Ukryj
+            Hide
           </button>
         </div>
       )}

@@ -14,7 +14,7 @@ const Categories = () => {
       console.log(response);
       setCategories(response.data);
     } catch (error) {
-      setCategories(["Wystąpił błąd, spróbuj ponownie."]);
+      setCategories(["An error occured."]);
     }
   };
 
@@ -24,7 +24,7 @@ const Categories = () => {
         <ul className="text-center flex flex-row justify-center align-middle flex-wrap">
           {categories.map((category) => (
             <li
-              className="p-5 mx-5 mb-5 w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow"
+              className="p-5 mx-5 mb-5 w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow self-center"
               key={category.id}
             >
               <Link

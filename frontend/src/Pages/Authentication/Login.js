@@ -57,7 +57,7 @@ const Login = ({ isUserLogged, setIsUserLogged }) => {
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Zresetuj swoje hasło
+            Reset Your Password
           </h2>
         </div>
 
@@ -92,19 +92,19 @@ const Login = ({ isUserLogged, setIsUserLogged }) => {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Zresetuj hasło
+                Reset Password
               </button>
             </div>
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Chcesz się zalogować?
+            Want to log in?
             <span
               onClick={() => setIsResetPasswordClicked(false)}
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
             >
               {" "}
-              Kliknij tutaj
+              Click here
             </span>
           </p>
         </div>
@@ -120,7 +120,7 @@ const Login = ({ isUserLogged, setIsUserLogged }) => {
           alt="Your Company"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Zaloguj się do swojego konta
+          Log in to your account
         </h2>
       </div>
 
@@ -153,14 +153,14 @@ const Login = ({ isUserLogged, setIsUserLogged }) => {
                 htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Hasło
+                Password
               </label>
               <div className="text-sm">
                 <div
                   className="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer"
                   onClick={() => setIsResetPasswordClicked(true)}
                 >
-                  Nie pamiętasz hasła?
+                  Do not remember the password?
                 </div>
               </div>
             </div>
@@ -179,8 +179,7 @@ const Login = ({ isUserLogged, setIsUserLogged }) => {
               />
               {isError && (
                 <p className="text-red-500 text-center text-s mt-4">
-                  Niepoprawne dane logowania lub użytkownik o takim adresie
-                  e-mail nie istnieje.
+                  Incorrect login details.
                 </p>
               )}
             </div>
@@ -191,19 +190,19 @@ const Login = ({ isUserLogged, setIsUserLogged }) => {
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Zaloguj
+              Log in
             </button>
           </div>
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">
-          Nie jesteś członkiem?
+          Not a member?
           <Link
             to="/register"
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
             {" "}
-            Zarejestruj się teraz
+            Register now
           </Link>
         </p>
       </div>

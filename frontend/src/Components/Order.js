@@ -3,7 +3,7 @@ import defaultImage from "../assets/thenounproject.svg";
 import x_mark from "../assets/x_mark.svg";
 import check_mark from "../assets/check_mark.svg";
 import { Link } from "react-router-dom";
-import Popup from "./Popup"
+import Popup from "./Popup";
 import ReviewForm from "./ReviewForm";
 
 const Order = ({ orders }) => {
@@ -34,11 +34,11 @@ const Order = ({ orders }) => {
           className="m-auto mb-5 p-5 min-w-[100%] lg:w-[50vw] lg:min-w-fit bg-white border border-gray-200 rounded-lg shadow "
         >
           <div className="flex justify-between">
-            <span className="italic">Zamówienie #{order.id}</span>
+            <span className="italic">Order #{order.id}</span>
             <span className="italic"> {formatDate(order.created)}</span>
           </div>
           <div className="flex">
-            <p>Opłacone:</p>{" "}
+            <p>Paid:</p>{" "}
             {order.paid ? (
               <img className="w-5" alt="tak" src={check_mark} />
             ) : (
@@ -47,10 +47,10 @@ const Order = ({ orders }) => {
           </div>
           <div className="flex justify-between my-5 items-center">
             <p>
-              Imię i Nazwisko: {order.first_name} {order.last_name}
+              Name: {order.first_name} {order.last_name}
             </p>
             <div>
-              <p className="text-right">Adres dostawy:</p>
+              <p className="text-right">Shipping address:</p>
               <div className="text-right">
                 <p>
                   {order.address} {order.address2}
@@ -83,8 +83,8 @@ const Order = ({ orders }) => {
                   }
                 />
                 <div className="pl-1 lg:pl-5 max-w-[115px] lg:max-w-none">
-                  <p>Ilość: {item.quantity}</p>
-                  <p>Łącznie: {(item.price * item.quantity).toFixed(2)}zł</p>
+                  <p>Amount: {item.quantity}</p>
+                  <p>Total: {(item.price * item.quantity).toFixed(2)}$</p>
                 </div>
               </div>
               {order.paid && (
@@ -96,7 +96,7 @@ const Order = ({ orders }) => {
                       onClick={() => openReviewForm(item.id)}
                       className="shadow bg-pink-400 hover:bg-pink-500 focus:shadow-outline focus:outline-none text-white text-sm font-bold py-2 px-2 rounded w-full lg:w-auto"
                     >
-                      Oceń produkt
+                      Review product
                     </button>
                   )}
                 </div>
@@ -104,12 +104,17 @@ const Order = ({ orders }) => {
               {selectedProduct === item.id && (
                 <Popup
                   handleClose={closeReviewForm}
-                  content={<ReviewForm product_id={item.product.id} product_name={item.product.name} />}
+                  content={
+                    <ReviewForm
+                      product_id={item.product.id}
+                      product_name={item.product.name}
+                    />
+                  }
                 />
               )}
             </div>
           ))}
-          <p>Całkowity koszt: {order.total_cost}zł</p>
+          <p>Total cost: {order.total_cost}$</p>
         </div>
       ))}
     </div>

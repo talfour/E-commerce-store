@@ -13,7 +13,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [recommendation, setRecommendation] = useState([])
+  const [recommendation, setRecommendation] = useState([]);
   const location = useLocation();
   const url = location.pathname;
 
@@ -22,13 +22,13 @@ const ProductDetail = () => {
       const response = await axiosInstance.get(
         `recommended-products/${productID}/`
       );
-      if (response.status === 200 & response.data.length > 0) {
-        setRecommendation(response.data)
+      if ((response.status === 200) & (response.data.length > 0)) {
+        setRecommendation(response.data);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const handleAddToCart = async (productID) => {
     try {
@@ -78,11 +78,11 @@ const ProductDetail = () => {
 
   return isNotFound ? (
     <h1 className="align-middle text-center text-5xl pt-10 pb-10 font-roboto font-bold">
-      Nie znalezliśmy takiego produktu.
+      Product was not found.
     </h1>
   ) : (
     isLoaded && !isNotFound && (
-      <section className="text-gray-700 body-font overflow-hidden bg-white h-fit mt-20">
+      <section className="text-gray-700 body-font overflow-hidden bg-white h-fit mt-20 mb-20 mx-5">
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
             <div className="max-w-[500px] h-[500px] w-full m-auto relative group">
@@ -176,14 +176,14 @@ const ProductDetail = () => {
                       onClick={() => handleAddToCart(product.id)}
                       className="flex ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      Dodaj do koszyka
+                      Add to cart
                     </button>
                   ) : (
                     <button
                       className="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded"
                       disabled
                     >
-                      Produkt tymczasowo niedostępny
+                      Product currently unavailable
                     </button>
                   )}
                 </div>
@@ -194,9 +194,9 @@ const ProductDetail = () => {
         {product.reviews.length > 0 && (
           <>
             <h1 className="text-center text-3xl mb-5">Reviews</h1>
-            <div className="flex justify-center px-5">
+            <div className="flex justify-center px-10 flex-col items-start">
               {product.reviews.map((review) => (
-                <div key={review.comment} className="flex flex-col items-start">
+                <div key={review.comment} className="flex flex-col min-w-[80%]">
                   <Stars rating={review.rating} />
                   <p className=" max-w-3xl mb-5">{review.comment}</p>
                 </div>
@@ -207,7 +207,7 @@ const ProductDetail = () => {
         {recommendation.length > 0 && (
           <div>
             <h1 className="text-center text-3xl my-5">
-              Inni kupowali również:
+              Others were buying also:
             </h1>
             <div className="flex items-center p-4 gap-4 flex-wrap align-middle justify-center">
               {recommendation.map((product) => (

@@ -18,12 +18,12 @@ const Login = ({isUserLogged}) => {
     e.preventDefault();
     // Password validation
     if (password.length < 8) {
-      setPasswordError("Hasło musi zawierać przynajmniej 8 znaków.");
+      setPasswordError("Password must be at least 8 characters long.");
       return; // Do not proceed with form submission
     }
 
     if (password !== passwordConfirm) {
-      setMatchError("Hasło nie jest takie same.");
+      setMatchError("Password is not the same");
       return; // Do not proceed with form submission
     }
     setPasswordError("");
@@ -39,7 +39,7 @@ const Login = ({isUserLogged}) => {
       }
     } catch (error) {
       console.log(error);
-      setRegisterError("Użytkownik z tym adresem email już istnieje.");
+      setRegisterError("User with this e-mail already exist.");
       return;
     }
   };
@@ -59,7 +59,7 @@ const Login = ({isUserLogged}) => {
           alt="Your Company"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Zarejestruj się
+          Register
         </h2>
       </div>
 
@@ -98,7 +98,7 @@ const Login = ({isUserLogged}) => {
                 htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Hasło
+                Password
               </label>
             </div>
             <div className="mt-2">
@@ -125,7 +125,7 @@ const Login = ({isUserLogged}) => {
                 htmlFor="password2"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Powtórz hasło
+                Password Confirm
               </label>
             </div>
             <div className="mt-2">
@@ -151,19 +151,19 @@ const Login = ({isUserLogged}) => {
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Zarejestruj
+              Register
             </button>
           </div>
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">
-          Masz już konto?
+          Already have an account?
           <Link
             to="/login"
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
             {" "}
-            Zaloguj się
+            Log in
           </Link>
         </p>
       </div>

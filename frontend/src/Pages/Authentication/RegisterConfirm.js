@@ -15,13 +15,13 @@ const RegisterConfirm = ({ isUserLogged }) => {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img className="mx-auto h-28 w-auto" src={myLogo} alt="Your Company" />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Rejestracja przebiegła pomyślnie, możesz się teraz{" "}
+          Your account was created you can now{" "}
           <Link
             to="/login"
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
             {" "}
-            zalogować
+            log in
           </Link>
           .
         </h2>

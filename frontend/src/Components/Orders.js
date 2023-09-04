@@ -19,7 +19,7 @@ const Orders = () => {
 
   return (
     <div>
-      <h1 className="text-center lg:text-5xl text-3xl pt-10 pb-10 font-roboto font-bold">Twoje zamówienia</h1>
+      <h1 className="text-center lg:text-5xl text-3xl pt-10 pb-10 font-roboto font-bold">Your orders</h1>
       <div>
         <Order orders={orders}></Order>
       </div>

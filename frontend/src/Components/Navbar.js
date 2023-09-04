@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { axiosInstance } from "../axios";
 import { Link } from "react-router-dom";
-import myLogo from "../assets/logo.svg";
 
 const Navbar = ({ isUserLogged, setIsUserLogged }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,18 +37,18 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
           <nav className="flex justify-between bg-gray-900 text-white w-screen">
             <div className="px-5 xl:px-12 py-6 flex w-full items-center text-xl">
               <Link to="/" className="text-3xl font-bold font-heading">
-                <img className="h-20" src={myLogo} alt="logo" />
+                Your Shop
               </Link>
               {/* Desktop Nav */}
               <ul className="hidden xl:flex px-4 mx-auto font-semibold font-heading space-x-12">
                 <li>
                   <Link to="/" className="hover:text-gray-200">
-                    Strona główna
+                    Home Page
                   </Link>
                 </li>
                 <li>
                   <Link to="/categories" className="hover:text-gray-200">
-                    Kategorie
+                    Categories
                   </Link>
                 </li>
               </ul>
@@ -112,13 +111,13 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
                         to="/login"
                         className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100  "
                       >
-                        Zaloguj
+                        Login
                       </Link>
                       <Link
                         to="/register"
                         className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100"
                       >
-                        Zarejestruj się
+                        Sign up
                       </Link>
                     </div>
                   )}
@@ -133,19 +132,19 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
                         to="/profile"
                         className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100"
                       >
-                        Profil
+                        Profile
                       </Link>
                       <Link
                         to="/orders"
                         className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100"
                       >
-                        Zamówienia
+                        Orders
                       </Link>
                       <div
                         onClick={submitLogout}
                         className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 cursor-pointer  "
                       >
-                        Wyloguj się
+                        Log out
                       </div>
                     </div>
                   )}
@@ -227,14 +226,14 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
             onClick={toggleSidebar}
             className="border-b-2 border-b-[#111827] w-full p-2 mb-2 font-heading"
           >
-            Strona główna
+            Home Page
           </Link>
           <Link
             to="/categories"
             onClick={toggleSidebar}
             className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
           >
-            Kategorie
+            Categories
           </Link>
           {isUserLogged ? (
             <>
@@ -243,14 +242,14 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
                 to="/profile"
                 className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
               >
-                Profil
+                Profile
               </Link>
               <Link
                 onClick={toggleSidebar}
                 to="/orders"
                 className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
               >
-                Zamówienia
+                Orders
               </Link>
               <div
                 onClick={() => {
@@ -260,7 +259,7 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
                 to="/logout"
                 className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
               >
-                Wyloguj się
+                Log out
               </div>
             </>
           ) : (
@@ -270,7 +269,7 @@ const Navbar = ({ isUserLogged, setIsUserLogged }) => {
                 onClick={toggleSidebar}
                 className="border-b-2 border-b-[#111827] w-full p-2 mb-2"
               >
-                Zaloguj się
+                Log in
               </Link>
             </>
           )}

@@ -169,14 +169,14 @@ const handleCoupon = async (e) => {
 
     if (response.status === 200) {
       setIsNotificationVisible(true);
-      setNotification({type: 'success', message: 'Kod rabatowy został zastosowany!'})
+      setNotification({type: 'success', message: 'Coupon code was applied!'})
     }
   } catch (error) {
     if (error.response && error.response.status === 400) {
       setIsNotificationVisible(true);
       setNotification({
         type: "warning",
-        message: "Nieprawidłowy kod rabatowy.",
+        message: "Coupon code is invalid",
       });
       setDiscount('');
     }
@@ -193,17 +193,17 @@ const handleCoupon = async (e) => {
           content={
             <div>
               <h1 className="text-center text-lg">
-                Twoje zamówienie zostało złożone.
+                Your order was placed
               </h1>
             </div>
           }
         />
       )}
       <div className="h-fit bg-gray-100 pt-20">
-        <h1 className="mb-10 text-center text-2xl font-bold">Twój koszyk</h1>
+        <h1 className="mb-10 text-center text-2xl font-bold">Your cart</h1>
         {shoppingCart.length === 0 ? (
           <h1 className="mb-10 text-center text-2xl font-bold">
-            Nic tu nie ma, dodaj produkty do koszyka!
+            Nothing there! Add products to cart.
           </h1>
         ) : (
           <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
@@ -256,7 +256,7 @@ const handleCoupon = async (e) => {
                         </span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <p className="text-sm">{product.total_price}zł</p>
+                        <p className="text-sm">{product.total_price}$</p>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -280,31 +280,30 @@ const handleCoupon = async (e) => {
             </div>
             <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
               <div className="mb-2 flex justify-between">
-                <p className="text-gray-700 ">Łącznie</p>
-                <p className="text-gray-700">{totalPrice}zł</p>
+                <p className="text-gray-700 ">Total</p>
+                <p className="text-gray-700">{totalPrice}$</p>
               </div>
               {discount !== "" && (
                 <div className="mb-2 flex justify-between">
-                  <p className="text-gray-700">Kod rabatowy: {couponCode}</p>
-                  <p className="text-gray-700">-{discount}zł</p>
+                  <p className="text-gray-700">Coupon: {couponCode}</p>
+                  <p className="text-gray-700">-{discount}$</p>
                 </div>
               )}
               <div className="mb-2 flex justify-between">
-                <p className="text-gray-700">Dostawa</p>
-                <p className="text-gray-700">10zł</p>
+                <p className="text-gray-700">Shipping</p>
+                <p className="text-gray-700">10$</p>
               </div>
               <hr className="my-4" />
               <div className="flex justify-between">
-                <p className="text-lg font-bold">Łącznie</p>
+                <p className="text-lg font-bold">Total including shipping</p>
                 <div className="">
                   <p className="mb-1 text-lg font-bold text-right">
                     {totalPrice + 10}zł
                   </p>
-                  <p className="text-sm text-gray-700">łącznie z VAT</p>
                 </div>
               </div>
               <div className="flex flex-col">
-                <p className="text-lg font-bold">Kod rabatowy</p>
+                <p className="text-lg font-bold">Coupon</p>
                 <input
                   type="text"
                   value={coupon}
@@ -315,14 +314,14 @@ const handleCoupon = async (e) => {
                   onClick={handleCoupon}
                   className="mt-1 shadow bg-pink-400 hover:bg-pink-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded w-full lg:w-auto"
                 >
-                  Zatwierdź kod
+                  Apply coupon
                 </button>
               </div>
               <button
                 onClick={togglePopup}
                 className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
               >
-                Przejdź do płatności
+                Pay
               </button>
             </div>
           </div>
@@ -340,13 +339,13 @@ const handleCoupon = async (e) => {
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="grid-first-name"
                     >
-                      Imię
+                      First Name
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                       id="grid-first-name"
                       type="text"
-                      placeholder="Imię"
+                      placeholder="First Name"
                       value={formData.first_name}
                       required
                       name="first_name"
@@ -358,13 +357,13 @@ const handleCoupon = async (e) => {
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="grid-last-name"
                     >
-                      Nazwisko
+                      Last Name
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="grid-last-name"
                       type="text"
-                      placeholder="Nazwisko"
+                      placeholder="Last Name"
                       value={formData.last_name}
                       name="last_name"
                       required
@@ -400,13 +399,13 @@ const handleCoupon = async (e) => {
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="grid-address"
                     >
-                      Adres
+                      Address
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="grid-address"
                       type="text"
-                      placeholder="Adres 1/1"
+                      placeholder="Address 1/1"
                       value={formData.address}
                       required
                       name="address"
@@ -418,7 +417,7 @@ const handleCoupon = async (e) => {
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="grid-address"
                     >
-                      Adres 2
+                      Address 2
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -435,14 +434,14 @@ const handleCoupon = async (e) => {
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="grid-city"
                     >
-                      Miasto
+                      Town/City
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="grid-city"
                       type="text"
                       name="city"
-                      placeholder="Miasto"
+                      placeholder="Town/City"
                       value={formData.city}
                       onChange={(e) => handleAddressChange(e)}
                     />
@@ -452,7 +451,7 @@ const handleCoupon = async (e) => {
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="grid-zip"
                     >
-                      Kod pocztowy
+                      Post Code
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -472,7 +471,7 @@ const handleCoupon = async (e) => {
                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                         htmlFor="grid-zip"
                       >
-                        Zapisać adres?
+                        Save Address?
                       </label>
                       <input
                         className="appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -485,10 +484,9 @@ const handleCoupon = async (e) => {
                   </div>
                 ) : (
                   <h3 className="text-center italic mb-5">
-                    Niezalogowani użytkownicy nie są w stanie śledzić swoich
-                    zamówień na platformie.{" "}
+                    Users not logged in are unable to track their orders.{" "}
                     <Link className="text-blue-500" to="/login">
-                      Zaloguj się
+                      Log in
                     </Link>
                   </h3>
                 )}
@@ -498,7 +496,7 @@ const handleCoupon = async (e) => {
                       className="shadow bg-pink-400 hover:bg-pink-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded w-full lg:w-auto"
                       type="submit"
                     >
-                      Zamów
+                      Order
                     </button>
                   </div>
                 </div>
@@ -510,7 +508,7 @@ const handleCoupon = async (e) => {
                     onClick={() => setShowAddresses(!showAddresses)}
                     className="pr-3 cursor-pointer mb-5"
                   >
-                    {showAddresses ? "Ukryj adresy" : "Pokaż zapisane adresy"}
+                    {showAddresses ? "Hide addresses" : "Show saved addresses"}
                   </p>
                   {showAddresses ? (
                     <svg
