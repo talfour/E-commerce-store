@@ -1,6 +1,4 @@
-# Project Vape Mate (E-commerce Store)
-
-## Work in progress.
+# E-commerce Store
 
 ## Table of Contents
 
@@ -46,10 +44,6 @@ User Orders and Order History:
 
     Provide a history of users' past orders and allow them to track their order status.
     Enable users to view and manage their order details, such as delivery address and payment information.
-
-Responsive Design:
-
-    Ensure that the application is responsive and optimized for various devices, such as desktops, tablets, and mobile phones.
 
 ## Installation
 
