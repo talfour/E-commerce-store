@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Pages/Home";
 import Categories from "./Pages/Category/Categories";
-import Cart from "./Components/Cart";
+import Cart from "./Pages/Cart/Cart";
 import Profile from "./Components/Profile";
 import PageNotFound from "./Pages/PageNotFound";
 import ProductDetail from "./Pages/Product/ProductDetail";
@@ -13,19 +13,18 @@ import Register from "./Pages/Authentication/Register";
 import RegisterConfirm from "./Pages/Authentication/RegisterConfirm";
 import ResetPassword from "./Pages/Authentication/ResetPassword";
 import { axiosInstance } from "./axios";
-import Orders from "./Components/Orders";
+import Orders from "./Pages/Order/Orders";
 import TopNav from "./Components/TopNav";
 export default function App() {
-
   const [isUserLogged, setIsUserLogged] = useState(false);
-  const [userEmail, setUserEmail] = useState('')
+  const [userEmail, setUserEmail] = useState("");
 
   // Check if user is logged in
   const isLogged = async () => {
     try {
       const response = await axiosInstance.get("user/me/");
       if (response.status === 200) {
-        setUserEmail(response.data.email)
+        setUserEmail(response.data.email);
         setIsUserLogged(true);
       }
     } catch (error) {

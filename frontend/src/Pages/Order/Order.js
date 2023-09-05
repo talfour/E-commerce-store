@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import defaultImage from "../assets/thenounproject.svg";
-import x_mark from "../assets/x_mark.svg";
-import check_mark from "../assets/check_mark.svg";
+import defaultImage from "../../assets/thenounproject.svg";
+import x_mark from "../../assets/x_mark.svg";
+import check_mark from "../../assets/check_mark.svg";
 import { Link } from "react-router-dom";
-import Popup from "./Popup";
-import ReviewForm from "./ReviewForm";
+import Popup from "../../Components/Popup";
+import ReviewForm from "../../Components/ReviewForm";
 
 const Order = ({ orders }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -68,7 +68,7 @@ const Order = ({ orders }) => {
             >
               <Link
                 className="text-blue-500 hover:text-blue-700 flex-[0_0_100%] text-lg mb-2"
-                to={`/product/${item.product.id}`}
+                to={`/products/${item.product.id}`}
               >
                 {item.product.name}
               </Link>
